@@ -2,6 +2,8 @@
 export { default as ForgetPasswordPage } from "./public/ForgetPasswordPage";
 export { default as SignInPage } from "./public/SignInPage";
 export { default as SignUpPage } from "./public/SignUpPage";
+export { default as VerifyUser } from "./public/VerifyUser";
+
 
 
 // from books

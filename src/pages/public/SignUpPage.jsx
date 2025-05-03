@@ -5,15 +5,36 @@ import { CustomeInputs } from '../../components/CustomeInputs';
 import { signUpInputes } from '../../assets/customeInputes/userSingUpFormFields';
 import useForm from '../../hooks/useForm.js';
 import { userRegistration } from '../../axio/axioHelper.js';
+import { validatePassword } from '../../services/validatePassword.js';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 const initialState = {}
 const SignUpPage = () => {
     const { form, setForm, handleOnChange } = useForm(initialState);
-    const handleOnSubmit = (e) => {
-        e.preventDefault();
-        console.log(form);
+    const navigate = useNavigate();
+    const handleOnSubmit = async (e) => {
+        try {
+            e.preventDefault();
+            // console.log(form);
+            const { confirmpassword, ...rest } = form
+            if (!validatePassword(rest.password)) {
+                toast.error("Password must contain 8 characters including uppercase, lowercase, number, and special symbol.");
+                return;
+            }
+            if (confirmpassword != rest.password) {
+                toast.error("Password dose not Matched with confirm Password")
+                return;
+            }
 
-        const result = userRegistration(form);
-        console.log(result);
+            const { url } = await userRegistration(rest);
+
+            // navigate(url); // Navigate to About page
+            // console.log(url);
+        } catch (error) {
+            toast.error(error.message)
+        }
+
+
 
     }
     return (

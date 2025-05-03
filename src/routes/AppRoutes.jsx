@@ -11,7 +11,8 @@ import {
     AllUsers,
     UserLayout,
     Books,
-    BorrowBooks
+    BorrowBooks,
+    VerifyUser
 
 } from "@pages/index"
 
@@ -27,6 +28,7 @@ const AppRoutes = () => {
                 <Route path="/login" element={<SignInPage></SignInPage>} />
                 <Route path="/signup" element={<SignUpPage></SignUpPage>} />
                 <Route path="/forgetpassword" element={<ForgetPasswordPage></ForgetPasswordPage>} />
+                <Route path="/activate-user" element={<VerifyUser></VerifyUser>} />
 
             </Route>
 
