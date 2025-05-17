@@ -12,6 +12,10 @@ const initialState = {}
 const SignUpPage = () => {
     const { form, setForm, handleOnChange } = useForm(initialState);
     const navigate = useNavigate();
+    // const initialFormData = signUpInputes.reduce((acc, curr) => {
+    //     acc[curr.name] = '';
+    //     return acc;
+    // }, {});
     const handleOnSubmit = async (e) => {
         try {
             e.preventDefault();
@@ -28,13 +32,15 @@ const SignUpPage = () => {
 
             const { url } = await userRegistration(rest);
 
-            // navigate(url); // Navigate to About page
-            // console.log(url);
+            // empty form fields after submitting form
+            const initialFormData = signUpInputes.reduce((acc, input) => {
+                acc[input.name] = '';
+                return acc;
+            }, {});
+            setForm(initialFormData)
         } catch (error) {
             toast.error(error.message)
         }
-
-
 
     }
     return (
@@ -46,6 +52,7 @@ const SignUpPage = () => {
                 {
                     signUpInputes.map((input) =>
                         <CustomeInputs key={input.name} {...input}
+                            value={form[input.name] || ''}
                             onChange={handleOnChange}
                         ></CustomeInputs>
                     )
@@ -55,7 +62,7 @@ const SignUpPage = () => {
                     Submit
                 </Button>
             </Form>
-        </div>
+        </div >
     )
 }
 

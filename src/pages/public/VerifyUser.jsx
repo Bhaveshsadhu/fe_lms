@@ -1,41 +1,48 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { verifyFromEmailLink } from '../../axio/axioHelper';
 import { toast } from 'react-toastify';
+import { Alert } from 'react-bootstrap'
+import Spinner from 'react-bootstrap/Spinner';
 
 const VerifyUser = () => {
     const [searchParam] = useSearchParams();
     const navigate = useNavigate();
     const token = searchParam.get('t');
+    const sessionId = searchParam.get('sessionId')
+
 
     useEffect(() => {
 
         const verify = async () => {
             try {
-                // alert("hellow world")
-                // call api for token verification
-                console.log(token)
-                const isVerify = await verifyFromEmailLink(token);
-                console.log(isVerify)
+                const isVerify = await verifyFromEmailLink({ token, sessionId });
+
                 const { status, message, result } = isVerify;
                 toast[status](message);
-                // store token in localstorage
-                if (result) {
-                    localStorage.setItem("UserInfo", result)
-                }
+
 
                 // redirect to dashboard
-                navigate('/user-profile'); // Redirect to protected page
+                navigate('/login');
             } catch (error) {
+                toast.error(error.message)
+            }
 
-            }
-            if (token) {
-                verify();
-            }
+
         }
-    }, [token, navigate])
+        // simpley returen if for double call and token is not found
+        if (token && sessionId) {
+            verify();
+        }
+        else {
+            toast.error("Not Valid URL")
+            return;
+        }
+    }, [sessionId, token])
     return (
-        <div>Verifying User Please Wait......</div>
+
+        <Alert className="p-3 m-5" variant="danger">Verifying User Please Wait......</Alert>
+
     )
 }
 

@@ -2,12 +2,23 @@ import axios from 'axios'
 import { toast } from 'react-toastify'
 const APIEP = 'http://localhost:8000/api/v1/auth';
 
-const apiProcessor = async ({ method, url, payLoad }) => {
+const apiProcessor = async ({ method, url, payLoad, token }) => {
     try {
+        if (token) {
+            const penndigResult = axios({
+                method,
+                url,
+                data: payLoad,
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+        }
         const penndigResult = axios({
             method,
             url,
-            data: payLoad
+            data: payLoad,
+
         });
         toast.promise(penndigResult, {
             pending: 'Loading Please Wait...',
@@ -42,7 +53,7 @@ export const verifyFromEmailLink = async (payLoad) => {
     try {
         const obj = {
             method: "POST",
-            url: APIEP + '/verify',
+            url: APIEP + '/activate-user',
             payLoad
         }
         const result = await apiProcessor(obj);
