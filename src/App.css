@@ -1,3 +1,13 @@
 .main-section {
     min-height: 80vh;
 }
+
+.singin {
+    /* height: 100vh; */
+    width: 100vw;
+    background: url('./assets/lib.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    min-height: 100vh;
+}

@@ -62,3 +62,21 @@ export const verifyFromEmailLink = async (payLoad) => {
         return error.message;
     }
 };
+
+// USER Login
+export const userLogin = async (payLoad) => {
+    try {
+
+        const obj = {
+            method: "POST",
+            url: APIEP + '/login',
+            payLoad
+        }
+        const result = await apiProcessor(obj)
+        // console.log(result)
+        return result;
+    } catch (error) {
+        return error.message
+    }
+
+}

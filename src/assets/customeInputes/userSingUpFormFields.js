@@ -35,7 +35,7 @@ export const signUpInputes = [{
 {
     label: "Password*",
     type: "password",
-    placeholder: "XXX-XXX-XXX",
+    placeholder: "********",
     name: "password",
     required: true,
     // value: form.password
@@ -43,7 +43,7 @@ export const signUpInputes = [{
 {
     label: "Confirm Password",
     type: "password",
-    placeholder: "XXX-XXX-XXX",
+    placeholder: "********",
     name: "confirmpassword",
     required: true,
     // value: form.confirmpassword
