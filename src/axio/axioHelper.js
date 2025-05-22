@@ -80,3 +80,18 @@ export const userLogin = async (payLoad) => {
     }
 
 }
+
+// FORGOT PASSWORD
+export const forgotPassword = async (payLoad) => {
+    try {
+        const obj = {
+            method: "POST",
+            url: APIEP + '/forgot-password',
+            payLoad
+        };
+        const result = await apiProcessor(obj);
+        return result;
+    } catch (error) {
+        return error.message;
+    }
+};

@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
@@ -61,6 +62,9 @@ const SignInPage = () => {
                         <Button variant="primary" type="submit">
                             Submit
                         </Button>
+                        <div className="mt-2 text-end">
+                            <Link to="/forgetpassword">Forgot Password?</Link>
+                        </div>
                     </Form>
 
 
