@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
@@ -6,11 +6,23 @@ import { loginFormFields } from '../../assets/customeInputes/loginFormFields.js'
 import { CustomeInputs } from '../../components/CustomeInputs';
 import useForm from '../../hooks/useForm.js';
 import { toast } from 'react-toastify';
-import { userLogin } from '../../axio/axioHelper.js';
+import { getUserProfile, userLogin } from '../../axio/axioHelper.js';
 import { validatePassword } from '../../services/validatePassword.js';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { setUser } from '../../redux/user/userSlice.js';
+import { useAutoLogin } from '../../features/autoLogin.js';
+// import { autoLogin } from '../../features/autoLogin.js';
 const initialState = {}
 const SignInPage = () => {
     const { form, setForm, handleOnChange } = useForm(initialState);
+    const dispatch = useDispatch()
+    const { user } = useSelector((state) => state.userInfo)
+    const navigate = useNavigate()
+    // const autologinfunc = async () => await autoLogin()
+    useEffect(() => {
+        user?._id ? navigate('/user') : useAutoLogin()
+    }, [user?._id, navigate, useAutoLogin])
     const handleOnSubmit = async (e) => {
         try {
             e.preventDefault();
@@ -21,13 +33,21 @@ const SignInPage = () => {
             //     return;
             // }
             const loginRes = await userLogin(form);
+            // console.log(loginRes)
             sessionStorage.setItem("accessJWT", loginRes.jwts.accessJWT)
             localStorage.setItem("refreshJWT", loginRes.jwts.refreshJWT)
 
-            console.log(loginRes)
-            const { status, message } = loginRes
+            // GET USER PROFILE
 
-            toast[status](message)
+            const { status, message } = loginRes
+            if (status === "success") {
+                const user = await getUserProfile()
+                // set userData into user redux if user have _id
+                user.user?._id && dispatch(setUser(user.user))
+
+            }
+
+            // toast[status](message)
 
             // empty form fields after submitting form
             const initialFormData = loginFormFields.reduce((acc, input) => {
@@ -61,6 +81,9 @@ const SignInPage = () => {
                         <Button variant="primary" type="submit">
                             Submit
                         </Button>
+                        <div className="mt-2 text-end">
+                            <Link to="/forgetpassword">Forgot Password?</Link>
+                        </div>
                     </Form>
 
 

@@ -1,30 +1,33 @@
 import axios from 'axios'
 import { toast } from 'react-toastify'
 const APIEP = 'http://localhost:8000/api/v1/auth';
+const USEREP = 'http://localhost:8000/api/v1/users';
 
-const apiProcessor = async ({ method, url, payLoad, token }) => {
+const getAccessJWT = () => {
+    return sessionStorage.getItem('accessJWT')
+}
+
+const apiProcessor = async ({ method, url, payLoad, isPrivateCall, showToast }) => {
     try {
-        if (token) {
-            const penndigResult = axios({
-                method,
-                url,
-                data: payLoad,
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
+        const headers = {}
+        if (isPrivateCall) {
+            headers.authorization = "Bearer " + getAccessJWT()
         }
+
         const penndigResult = axios({
             method,
             url,
             data: payLoad,
+            headers
+        });
 
-        });
-        toast.promise(penndigResult, {
-            pending: 'Loading Please Wait...',
-        });
+        if (showToast) {
+            toast.promise(penndigResult, {
+                pending: 'Loading Please Wait...',
+            });
+        }
         const { data } = await penndigResult;
-        toast[data.status](data.message);
+        showToast === true && toast[data.status](data.message);
         return data;
     } catch (error) {
         toast.error(error.response?.data?.message || 'API Request failed');
@@ -37,7 +40,10 @@ export const userRegistration = async (payLoad) => {
         const obj = {
             method: "POST",
             url: APIEP + '/register',
-            payLoad
+            payLoad,
+            isPrivateCall: false,
+            showToast: true
+
         }
         const result = await apiProcessor(obj)
         // console.log(result)
@@ -54,7 +60,9 @@ export const verifyFromEmailLink = async (payLoad) => {
         const obj = {
             method: "POST",
             url: APIEP + '/activate-user',
-            payLoad
+            payLoad,
+            isPrivateCall: false,
+            showToast: true
         }
         const result = await apiProcessor(obj);
         return result;
@@ -70,7 +78,26 @@ export const userLogin = async (payLoad) => {
         const obj = {
             method: "POST",
             url: APIEP + '/login',
-            payLoad
+            payLoad,
+            isPrivateCall: false,
+            showToast: true
+        }
+        const result = await apiProcessor(obj)
+        // console.log(result)
+        return result;
+    } catch (error) {
+        return error.message
+    }
+
+}
+// GET USER PROFILE
+export const getUserProfile = async () => {
+    try {
+        const obj = {
+            method: "GET",
+            url: USEREP + '/profile',
+            isPrivateCall: true,
+            showToast: false
         }
         const result = await apiProcessor(obj)
         // console.log(result)
