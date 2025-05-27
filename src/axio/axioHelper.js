@@ -4,14 +4,21 @@ const APIEP = 'http://localhost:8000/api/v1/auth';
 const USEREP = 'http://localhost:8000/api/v1/users';
 
 const getAccessJWT = () => {
-    return sessionStorage.getItem('accessJWT')
+    return sessionStorage.getItem("accessJWT")
+}
+const getRefreshJWT = () => {
+    return localStorage.getItem("refreshJWT")
 }
 
-const apiProcessor = async ({ method, url, payLoad, isPrivateCall, showToast }) => {
+const apiProcessor = async ({ method, url, payLoad, isPrivateCall, showToast, isrefreshJWT }) => {
     try {
         const headers = {}
+
         if (isPrivateCall) {
-            headers.authorization = "Bearer " + getAccessJWT()
+            // headers.authorization = "Bearer " + getAccessJWT()
+            const token = isrefreshJWT ? getRefreshJWT() : getAccessJWT()
+            headers.authorization = "Bearer " + token
+            // console.log(token)
         }
 
         const penndigResult = axios({
@@ -98,6 +105,25 @@ export const getUserProfile = async () => {
             url: USEREP + '/profile',
             isPrivateCall: true,
             showToast: false
+        }
+        const result = await apiProcessor(obj)
+        // console.log(result)
+        return result;
+    } catch (error) {
+        return error.message
+    }
+
+}
+
+// RENEW ACCESSJWT FROM REFRESHJWT
+export const renewAccessJWT = async () => {
+    try {
+        const obj = {
+            method: "GET",
+            url: APIEP + '/renew-jwt',
+            isPrivateCall: true,
+            showToast: false,
+            isrefreshJWT: true
         }
         const result = await apiProcessor(obj)
         // console.log(result)

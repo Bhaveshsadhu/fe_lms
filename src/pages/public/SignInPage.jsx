@@ -6,23 +6,57 @@ import { loginFormFields } from '../../assets/customeInputes/loginFormFields.js'
 import { CustomeInputs } from '../../components/CustomeInputs';
 import useForm from '../../hooks/useForm.js';
 import { toast } from 'react-toastify';
-import { getUserProfile, userLogin } from '../../axio/axioHelper.js';
+import { getUserProfile, renewAccessJWT, userLogin } from '../../axio/axioHelper.js';
 import { validatePassword } from '../../services/validatePassword.js';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUser } from '../../redux/user/userSlice.js';
-import { useAutoLogin } from '../../features/autoLogin.js';
-// import { autoLogin } from '../../features/autoLogin.js';
 const initialState = {}
 const SignInPage = () => {
     const { form, setForm, handleOnChange } = useForm(initialState);
     const dispatch = useDispatch()
     const { user } = useSelector((state) => state.userInfo)
     const navigate = useNavigate()
-    // const autologinfunc = async () => await autoLogin()
+
+
+
     useEffect(() => {
-        user?._id ? navigate('/user') : useAutoLogin()
-    }, [user?._id, navigate, useAutoLogin])
+        const run = async () => {
+            if (user?._id) {
+                // if we have user in redux store
+                navigate('/user');
+            } else {
+                // #AUTO LOGIN FEATURE - 1 
+                // when we refresh browser user data wiped out from redux store
+                // but we have acccess token in browser memory so we can get user details 
+                // using accessJWT and auto login using that token
+                // login below
+                const accessJWT = sessionStorage.getItem('accessJWT')
+                if (accessJWT) {
+                    const user = await getUserProfile();
+                    console.log(user)
+                    user.user?._id && dispatch(setUser(user.user))//this will update the user._id 
+                    // so useEffect run again as per dependencies
+                }
+                else {
+                    const refreshJWT = sessionStorage.getItem('refreshJWT')
+                    const newAccessJWT = await renewAccessJWT()
+                    // console.log(newAccessJWT.payload)
+                    sessionStorage.setItem('accessJWT', newAccessJWT.payload)
+
+                    const user = await getUserProfile();
+                    user.user?._id && dispatch(setUser(user.user))
+                    console.log(user)
+
+                }
+
+
+            }
+        };
+
+        run();
+    }, [user?._id, navigate]);
+
     const handleOnSubmit = async (e) => {
         try {
             e.preventDefault();
@@ -34,8 +68,8 @@ const SignInPage = () => {
             // }
             const loginRes = await userLogin(form);
             // console.log(loginRes)
-            sessionStorage.setItem("accessJWT", loginRes.jwts.accessJWT)
-            localStorage.setItem("refreshJWT", loginRes.jwts.refreshJWT)
+            sessionStorage.setItem("accessJWT", JSON.stringify(loginRes.jwts.accessJWT))
+            localStorage.setItem("refreshJWT", JSON.stringify(loginRes.jwts.refreshJWT))
 
             // GET USER PROFILE
 
