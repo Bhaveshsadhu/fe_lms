@@ -22,6 +22,7 @@ const SignInPage = () => {
 
     useEffect(() => {
         const run = async () => {
+
             if (user?._id) {
                 // if we have user in redux store
                 navigate('/user');
@@ -34,9 +35,21 @@ const SignInPage = () => {
                 const accessJWT = sessionStorage.getItem('accessJWT')
                 if (accessJWT) {
                     const user = await getUserProfile();
-                    console.log(user)
                     user.user?._id && dispatch(setUser(user.user))//this will update the user._id 
                     // so useEffect run again as per dependencies
+                    if (user.message === "jwt expired" || user.message === "Unauthorized") {
+
+                        console.log("jwt expired result")
+
+                        const refreshJWT = sessionStorage.getItem('refreshJWT')
+                        const newAccessJWT = await renewAccessJWT()
+                        // console.log(newAccessJWT.payload)
+                        sessionStorage.setItem('accessJWT', newAccessJWT.payload)
+
+                        const user = await getUserProfile();
+                        user.user?._id && dispatch(setUser(user.user))
+                    }
+
                 }
                 else {
                     const refreshJWT = sessionStorage.getItem('refreshJWT')
@@ -46,12 +59,12 @@ const SignInPage = () => {
 
                     const user = await getUserProfile();
                     user.user?._id && dispatch(setUser(user.user))
-                    console.log(user)
 
                 }
 
 
             }
+
         };
 
         run();
@@ -68,8 +81,8 @@ const SignInPage = () => {
             // }
             const loginRes = await userLogin(form);
             // console.log(loginRes)
-            sessionStorage.setItem("accessJWT", JSON.stringify(loginRes.jwts.accessJWT))
-            localStorage.setItem("refreshJWT", JSON.stringify(loginRes.jwts.refreshJWT))
+            sessionStorage.setItem("accessJWT", loginRes.jwts.accessJWT)
+            localStorage.setItem("refreshJWT", loginRes.jwts.refreshJWT)
 
             // GET USER PROFILE
 

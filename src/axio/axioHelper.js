@@ -17,11 +17,13 @@ const apiProcessor = async ({ method, url, payLoad, isPrivateCall, showToast, is
         if (isPrivateCall) {
             // headers.authorization = "Bearer " + getAccessJWT()
             const token = isrefreshJWT ? getRefreshJWT() : getAccessJWT()
+            // console.log("Access JWT:", getAccessJWT());
+            // console.log("refreshJWT:", getRefreshJWT());
             headers.authorization = "Bearer " + token
             // console.log(token)
         }
 
-        const penndigResult = axios({
+        const pendingRequest = axios({
             method,
             url,
             data: payLoad,
@@ -29,15 +31,22 @@ const apiProcessor = async ({ method, url, payLoad, isPrivateCall, showToast, is
         });
 
         if (showToast) {
-            toast.promise(penndigResult, {
+            toast.promise(pendingRequest, {
                 pending: 'Loading Please Wait...',
             });
         }
-        const { data } = await penndigResult;
+        const { data } = await pendingRequest;
         showToast === true && toast[data.status](data.message);
         return data;
     } catch (error) {
-        toast.error(error.response?.data?.message || 'API Request failed');
+        // toast.error(error.response?.data?.message || 'API Request failed');
+        if (showToast) {
+            toast.error(error.response?.data?.message || error.message || 'API Request failed');
+            return {
+                status: 'error',
+                message: error.response?.data?.message || error.message,
+            };
+        }
     }
 }
 // USER REGISTRATION
@@ -107,9 +116,9 @@ export const getUserProfile = async () => {
             showToast: false
         }
         const result = await apiProcessor(obj)
-        // console.log(result)
         return result;
     } catch (error) {
+        // console.log(error.message)
         return error.message
     }
 
