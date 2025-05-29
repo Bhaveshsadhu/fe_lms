@@ -1,9 +1,8 @@
-import React from 'react';
-import Button from 'react-bootstrap/Button';
+
 import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
-import { CustomeInputs } from '../../components/CustomeInputs';
-import useForm from '../../hooks/useForm';
+import { CustomeInputs } from '@components/CustomeInputs';
+import useForm from '@hooks/useForm';
 import { toast } from 'react-toastify';
 // import { forgotPassword } from '../../axio/axioHelper';
 

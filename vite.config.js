@@ -15,6 +15,8 @@ export default defineConfig({
       '@pages': path.resolve(__dirname, "./src/pages"),
       '@redux': path.resolve(__dirname, "./src/redux"),
       '@services': path.resolve(__dirname, "./src/services"),
+      '@assets': path.resolve(__dirname, "./src/assets"),
+      '@axio': path.resolve(__dirname, "./src/axio"),
     }
   }
 })

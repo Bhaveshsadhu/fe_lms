@@ -142,3 +142,21 @@ export const renewAccessJWT = async () => {
     }
 
 }
+
+// LOGOUT
+export const logoutUser = async () => {
+    try {
+        const obj = {
+            method: "GET",
+            url: APIEP + '/logout',
+            isPrivateCall: true,
+            showToast: true,
+        }
+        const result = await apiProcessor(obj)
+        // console.log(result)
+        return result;
+    } catch (error) {
+        return error.message
+    }
+
+}

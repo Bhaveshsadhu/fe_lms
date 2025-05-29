@@ -7,13 +7,30 @@ import { SlLogin } from "react-icons/sl";
 import { SiGnuprivacyguard } from "react-icons/si";
 import { TbLockPassword } from "react-icons/tb";
 import logo from '@/assets/LMS.png'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { AiFillDashboard } from "react-icons/ai";
 import { TbLogout } from "react-icons/tb";
+import { logoutUser } from '../axio/axioHelper';
+import { setUser } from '../redux/user/userSlice';
 
 
 const Header = () => {
     const { user } = useSelector((state) => state.userInfo)
+    const dispatch = useDispatch()
+    const handleLogout = async (e) => {
+        e.preventDefault();
+
+        // LOGOUT FROM API
+        const resLogout = await logoutUser();
+
+        // LOGOUT FROM FRONT-END
+        sessionStorage.removeItem('accessJWT')
+        localStorage.removeItem('refreshJWT')
+
+        // WIPED OUT DATA FROM GLOBAL STATE
+        dispatch(setUser({}))
+
+    }
     return (
         <Navbar expand="md" className="bg-dark" variant='dark'>
             <Container>
@@ -27,7 +44,7 @@ const Header = () => {
                             user?._id ?
                                 (<>
                                     <Link className="nav-link" to="/user"> <AiFillDashboard /> Dashboard</Link>
-                                    <Link className="nav-link" to="/"><TbLogout /> Logout</Link >
+                                    <Link className="nav-link" to="/" onClick={handleLogout}><TbLogout /> Logout</Link >
                                     {/* <Link className="nav-link" to="/forgetpassword"><TbLockPassword /> ForgetPassword</Link> */}
                                 </>)
                                 :

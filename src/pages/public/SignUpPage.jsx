@@ -1,11 +1,11 @@
 import React from 'react'
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import { CustomeInputs } from '../../components/CustomeInputs';
-import { signUpInputes } from '../../assets/customeInputes/userSingUpFormFields';
-import useForm from '../../hooks/useForm.js';
-import { userRegistration } from '../../axio/axioHelper.js';
-import { validatePassword } from '../../services/validatePassword.js';
+import { CustomeInputs } from '@components/CustomeInputs';
+import { signUpInputes } from '@assets/customeInputes/userSingUpFormFields';
+import useForm from '@hooks/useForm.js';
+import { userRegistration } from '@axio/axioHelper.js';
+import { validatePassword } from '@services/validatePassword.js';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 const initialState = {}

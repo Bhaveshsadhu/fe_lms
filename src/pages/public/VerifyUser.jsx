@@ -1,9 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { verifyFromEmailLink } from '../../axio/axioHelper';
+import { verifyFromEmailLink } from '@axio/axioHelper';
 import { toast } from 'react-toastify';
 import { Alert } from 'react-bootstrap'
-import Spinner from 'react-bootstrap/Spinner';
 
 const VerifyUser = () => {
     const [searchParam] = useSearchParams();

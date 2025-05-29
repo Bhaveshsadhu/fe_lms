@@ -1,22 +1,25 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
-import { loginFormFields } from '../../assets/customeInputes/loginFormFields.js';
-import { CustomeInputs } from '../../components/CustomeInputs';
-import useForm from '../../hooks/useForm.js';
+import { loginFormFields } from '@assets/customeInputes/loginFormFields.js';
+import { CustomeInputs } from '@components/CustomeInputs';
+import useForm from '@hooks/useForm.js';
 import { toast } from 'react-toastify';
 import { getUserProfile, renewAccessJWT, userLogin } from '../../axio/axioHelper.js';
-import { validatePassword } from '../../services/validatePassword.js';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { setUser } from '../../redux/user/userSlice.js';
+import { setUser } from '@redux/user/userSlice.js';
+import Spinner from 'react-bootstrap/Spinner';
 const initialState = {}
 const SignInPage = () => {
     const { form, setForm, handleOnChange } = useForm(initialState);
     const dispatch = useDispatch()
     const { user } = useSelector((state) => state.userInfo)
     const navigate = useNavigate()
+    // const showLoadingRef = useRef(true)
+    const [showLoading, setShowLoading] = useState(true)
+
 
 
 
@@ -26,6 +29,7 @@ const SignInPage = () => {
             if (user?._id) {
                 // if we have user in redux store
                 navigate('/user');
+
             } else {
                 // #AUTO LOGIN FEATURE - 1 
                 // when we refresh browser user data wiped out from redux store
@@ -34,12 +38,14 @@ const SignInPage = () => {
                 // login below
                 const accessJWT = sessionStorage.getItem('accessJWT')
                 if (accessJWT) {
+
                     const user = await getUserProfile();
-                    user.user?._id && dispatch(setUser(user.user))//this will update the user._id 
+                    if (user.user?._id) {
+                        dispatch(setUser(user.user))//this will update the user._id 
+                    }
                     // so useEffect run again as per dependencies
                     if (user.message === "jwt expired" || user.message === "Unauthorized") {
 
-                        console.log("jwt expired result")
 
                         const refreshJWT = sessionStorage.getItem('refreshJWT')
                         const newAccessJWT = await renewAccessJWT()
@@ -59,7 +65,6 @@ const SignInPage = () => {
 
                     const user = await getUserProfile();
                     user.user?._id && dispatch(setUser(user.user))
-
                 }
 
 
@@ -68,6 +73,17 @@ const SignInPage = () => {
         };
 
         run();
+
+        // if token found then it may take 3 sec to fetch data so we show loader for 3 sec
+        if (sessionStorage.getItem('refreshJWT') || sessionStorage.getItem('accessJWT')) {
+            setTimeout(() => { setShowLoading(false) }, 2000)
+        }
+        else {
+            // if token not found then immdiately show the login page NO-WAIT
+            setShowLoading(false)
+        }
+
+
     }, [user?._id, navigate]);
 
     const handleOnSubmit = async (e) => {
@@ -107,8 +123,17 @@ const SignInPage = () => {
         }
 
     }
+
+
+    if (showLoading) {
+        return <div className='min-vh-100 d-flex justify-content-center align-items-center'>
+            <Spinner animation="grow" />
+        </div>;
+    }
+
+
     return (
-        <div className='d-flex justify-content-center align-items-center singin p-5 mt-5 shadow-lg'>
+        <div className='d-flex justify-content-center align-items-center singin p-5 shadow-lg'>
             <Card >
                 <Card.Body>
                     <Card.Title>Login Now</Card.Title>
