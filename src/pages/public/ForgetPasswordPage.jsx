@@ -1,10 +1,10 @@
-
+import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
 import { CustomeInputs } from '@components/CustomeInputs';
 import useForm from '@hooks/useForm';
 import { toast } from 'react-toastify';
-// import { forgotPassword } from '../../axio/axioHelper';
+import { forgotPassword } from '../../axio/axioHelper';
 
 const ForgetPasswordPage = () => {
     const { form, handleOnChange, setForm } = useForm({});
@@ -15,6 +15,7 @@ const ForgetPasswordPage = () => {
         if (email) {
             try {
                 const result = await forgotPassword({ email });
+                // console.log(result)
                 if (result && result.status === 'success') {
                     toast.success(result.message || "Password reset email sent successfully!");
                     setForm({});
@@ -23,7 +24,7 @@ const ForgetPasswordPage = () => {
                 }
             } catch (error) {
                 toast.error("An unexpected error occurred. Please try again later.");
-                console.error("Forgot Password Error:", error); // For debugging
+                // console.error("Forgot Password Error:", error); // For debugging
             }
         } else {
             toast.error("Please enter your email address.");
@@ -53,7 +54,9 @@ const ForgetPasswordPage = () => {
                             value={form[emailField.name] || ''}
                             onChange={handleOnChange}
                         />
-
+                        <Button variant="primary" type="submit">
+                            Submit
+                        </Button>
                     </Form>
                 </Card.Body>
             </Card>

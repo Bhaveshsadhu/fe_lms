@@ -1,4 +1,3 @@
-import React from 'react'
 import { Routes, Route } from "react-router-dom"
 import {
     DashBoardPage,
@@ -12,7 +11,8 @@ import {
     UserLayout,
     Books,
     BorrowBooks,
-    VerifyUser
+    VerifyUser,
+    ResetPassword
 
 } from "@pages/index"
 
@@ -29,6 +29,7 @@ const AppRoutes = () => {
                 <Route path="/signup" element={<SignUpPage></SignUpPage>} />
                 <Route path="/forgetpassword" element={<ForgetPasswordPage></ForgetPasswordPage>} />
                 <Route path="/activate-user" element={<VerifyUser></VerifyUser>} />
+                <Route path="/reset-password" element={<ResetPassword></ResetPassword>} />
 
             </Route>
 

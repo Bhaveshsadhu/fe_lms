@@ -160,3 +160,61 @@ export const logoutUser = async () => {
     }
 
 }
+
+// FORGET PASSWORD
+export const forgotPassword = async (payLoad) => {
+    try {
+
+        const obj = {
+            method: "POST",
+            url: USEREP + '/forget-password',
+            payLoad,
+            isPrivateCall: false,
+            showToast: true
+        }
+        const result = await apiProcessor(obj)
+        // console.log(result)
+        return result;
+    } catch (error) {
+        return error.message
+    }
+
+}
+// RESET PASSWORD 
+export const resetPassword = async (payLoad) => {
+    try {
+
+        const obj = {
+            method: "POST",
+            url: USEREP + '/reset-password',
+            payLoad,
+            isPrivateCall: false,
+            showToast: true
+        }
+        const result = await apiProcessor(obj)
+        // console.log(result)
+        return result;
+    } catch (error) {
+        return error.message
+    }
+
+}
+// SET NEW PASSWORD 
+export const setNewPassword = async (payLoad) => {
+    try {
+
+        const obj = {
+            method: "POST",
+            url: USEREP + '/setNewPassword',
+            payLoad,
+            isPrivateCall: true,
+            showToast: true
+        }
+        const result = await apiProcessor(obj)
+        // console.log(result)
+        return result;
+    } catch (error) {
+        return error.message
+    }
+
+}
