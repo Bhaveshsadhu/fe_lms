@@ -1,8 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit'
 import userReducer from './user/userSlice.js'
+import bookReducer from './books/bookSlice.js'
+
+
 
 export default configureStore({
     reducer: {
-        userInfo: userReducer
+        userInfo: userReducer,
+        bookInfo: bookReducer,
     },
 })

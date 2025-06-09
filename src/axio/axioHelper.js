@@ -1,7 +1,11 @@
+
 import axios from 'axios'
 import { toast } from 'react-toastify'
-const APIEP = 'http://localhost:8000/api/v1/auth';
-const USEREP = 'http://localhost:8000/api/v1/users';
+// const APIEP = 'http://localhost:8000/api/v1/auth';
+// const USEREP = 'http://localhost:8000/api/v1/users';
+const APIEP = import.meta.env.VITE_API_URL;
+const USEREP = import.meta.env.VITE_API_URL_USEREP;
+const API_BOOKS = import.meta.env.VITE_API_URL_BOOKS;
 
 const getAccessJWT = () => {
     return sessionStorage.getItem("accessJWT")
@@ -212,6 +216,61 @@ export const setNewPassword = async (payLoad) => {
         }
         const result = await apiProcessor(obj)
         // console.log(result)
+        return result;
+    } catch (error) {
+        return error.message
+    }
+
+}
+
+// BOOK CRUD - ADD NEW BOOK
+export const addNewBook = async (payLoad) => {
+    try {
+        const obj = {
+            method: "POST",
+            url: API_BOOKS,
+            payLoad,
+            isPrivateCall: true,
+            showToast: true
+        }
+        const result = await apiProcessor(obj)
+        // console.log(result)
+        return result;
+    } catch (error) {
+        return error.message
+    }
+
+}
+// BOOK CRUD - ADD NEW BOOK
+//Get all books - IF ROLE=ADMIN GET ALL BOOKS, IF ROLE=USER GET ONLY AVAILABLE BOOKS
+export const getBooks = async () => {
+    try {
+        const obj = {
+            method: "GET",
+            url: API_BOOKS,
+            isPrivateCall: true,
+            showToast: true
+        }
+        const result = await apiProcessor(obj)
+        // console.log(result)
+        return result;
+    } catch (error) {
+        return error.message
+    }
+
+}
+// UPDATE BOOK BY ID
+export const updateBookByID = async (payLoad) => {
+    try {
+        const obj = {
+            method: "PUT",
+            url: API_BOOKS,
+            isPrivateCall: true,
+            payLoad,
+            showToast: true
+        }
+        const result = await apiProcessor(obj)
+        console.log(result)
         return result;
     } catch (error) {
         return error.message

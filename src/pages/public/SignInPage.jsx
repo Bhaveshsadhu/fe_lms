@@ -2,15 +2,16 @@ import React, { useEffect, useState } from 'react'
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
-import { loginFormFields } from '@assets/customeInputes/loginFormFields.js';
 import { CustomeInputs } from '@components/CustomeInputs';
 import useForm from '@hooks/useForm.js';
 import { toast } from 'react-toastify';
 import { getUserProfile, renewAccessJWT, userLogin } from '../../axio/axioHelper.js';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUser } from '@redux/user/userSlice.js';
 import Spinner from 'react-bootstrap/Spinner';
+import { loginFormFields } from '@/assets/customeInputes/loginFormFields.js';
+// import { loginFormFields } from '@/assets/customeInputes/loginFormFields.js';
 const initialState = {}
 const SignInPage = () => {
     const { form, setForm, handleOnChange } = useForm(initialState);
@@ -19,16 +20,15 @@ const SignInPage = () => {
     const navigate = useNavigate()
     // const showLoadingRef = useRef(true)
     const [showLoading, setShowLoading] = useState(true)
-
-
-
-
+    const location = useLocation();
+    // console.log(location)
+    const path = location?.state?.from ?? '/user'
     useEffect(() => {
         const run = async () => {
 
             if (user?._id) {
                 // if we have user in redux store
-                navigate('/user');
+                navigate(path);
 
             } else {
                 // #AUTO LOGIN FEATURE - 1 

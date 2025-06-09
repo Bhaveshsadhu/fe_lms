@@ -1,0 +1,40 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "paths": {
+            "@/*": [
+                "src/*"
+            ],
+            "@components/*": [
+                "src/components/*"
+            ],
+            "@auth/*": [
+                "src/components/auth/*"
+            ],
+            "@features/*": [
+                "src/features/*"
+            ],
+            "@hooks/*": [
+                "src/hooks/*"
+            ],
+            "@pages/*": [
+                "src/pages/*"
+            ],
+            "@redux/*": [
+                "src/redux/*"
+            ],
+            "@services/*": [
+                "src/services/*"
+            ],
+            "@assets/*": [
+                "src/assets/*"
+            ],
+            "@axio/*": [
+                "src/axio/*"
+            ]
+        }
+    },
+    "include": [
+        "src"
+    ]
+}

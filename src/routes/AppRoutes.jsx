@@ -2,7 +2,6 @@ import { Routes, Route } from "react-router-dom"
 import {
     DashBoardPage,
     HomePage,
-    DefaultLayout,
     SignInPage,
     SignUpPage,
     ForgetPasswordPage,
@@ -12,7 +11,10 @@ import {
     Books,
     BorrowBooks,
     VerifyUser,
-    ResetPassword
+    ResetPassword,
+    DefaultLayout,
+    NewBookPage,
+    EditBookPage
 
 } from "@pages/index"
 
@@ -38,8 +40,14 @@ const AppRoutes = () => {
                 <Route index element={<DashBoardPage />} />
                 <Route path="user-profile" element={<UserProfile></UserProfile>} />
                 <Route path="user-alluser" element={<AllUsers></AllUsers>} />
-                <Route path="user-books" element={<Books></Books>} />
-                <Route path="user-booksborrows" element={<BorrowBooks></BorrowBooks>} />
+                <Route path="books" element={<Books></Books>} />
+                {/* <Route path="user-booksborrows" element={<BorrowBooks></BorrowBooks>} /> */}
+                <Route path="books/add" element={<NewBookPage></NewBookPage>} />
+                <Route path="books/borrow" element={<BorrowBooks></BorrowBooks>} />
+                <Route path="books/edit" element={<EditBookPage></EditBookPage>} />
+
+                {/* <Route path="books/borrow" element={<BorrowBooks></BorrowBooks>} /> */}
+
             </Route>
         </Routes>
     )

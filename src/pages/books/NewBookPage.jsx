@@ -1,8 +1,9 @@
+import AddNewBook from '@/components/books/AddNewBook'
 import React from 'react'
 
 const NewBookPage = () => {
     return (
-        <div>NewBookPage</div>
+        <div className='p-5'><AddNewBook></AddNewBook></div>
     )
 }
 

@@ -1,8 +1,9 @@
+import BookTable from '@/components/books/BookTable'
 import React from 'react'
 
 const EditBookPage = () => {
     return (
-        <div>EditBookPage</div>
+        <div><BookTable></BookTable></div>
     )
 }
 

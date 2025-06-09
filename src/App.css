@@ -1,5 +1,6 @@
 .main-section {
     min-height: 80vh;
+    width: calc(100% - 200px);
 }
 
 .singin {
