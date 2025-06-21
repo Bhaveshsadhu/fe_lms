@@ -10,7 +10,7 @@ const DefaultLayout = () => {
             <Header></Header>
 
             {/* Main sections */}
-            <main className='main-section'>
+            <main className='main-section-public'>
                 <Outlet />
             </main>
             {/* Footer */}

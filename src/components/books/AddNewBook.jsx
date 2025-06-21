@@ -7,13 +7,13 @@ import useForm from '@/hooks/useForm';
 import { addNewBook, getBooks } from '@/axio/axioHelper';
 // import { useDispatch, useSelector } from 'react-redux'
 import { setBook } from '@/redux/books/bookSlice';
-import { toast } from 'react-toastify';
 const initialState = {}
 const AddNewBook = () => {
     // const dispatch = useDispatch()
     const { form, setForm, handleOnChange } = useForm(initialState);
     const handleOnSubmit = async (e) => {
         e.preventDefault();
+        console.log(form.ExpectedDateAvailable)
         const result = await addNewBook(form)
 
         if (result.status === "success") {
@@ -25,7 +25,7 @@ const AddNewBook = () => {
         }
     }
     return (
-        <div>
+        <div className='main'>
             <h2>Add New Book</h2>
             <hr></hr>
             <div>

@@ -3,6 +3,14 @@
     width: calc(100% - 200px);
 }
 
+.main-section-public {
+    min-height: 80vh;
+}
+
+/* .main-section .main {
+    width: 100%;
+} */
+
 .singin {
     /* height: 100vh; */
     width: 100%;

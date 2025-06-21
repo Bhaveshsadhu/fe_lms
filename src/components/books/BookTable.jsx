@@ -81,45 +81,47 @@ const BookTable = () => {
                 </div>
             </div>
             <hr></hr>
-            <Table striped bordered hover>
-                <thead>
-                    <tr>
-                        <th>Cover Image</th>
-                        <th>Title</th>
-                        <th>Categoery</th>
-                        <th>description</th>
-                        <th>Available</th>
+            <div className="table-responsive">
+                <Table striped bordered hover >
+                    <thead>
+                        <tr>
+                            <th>Cover Image</th>
+                            <th>Title</th>
+                            <th>Categoery</th>
+                            <th>description</th>
+                            <th>Available</th>
+                            {
+                                // ONLY ADMIN CAN EDIT THE BOOKS
+                                user?.role === "admin" && <th>Edit</th>
+                            }
+
+                        </tr>
+                    </thead>
+                    <tbody>
                         {
-                            // ONLY ADMIN CAN EDIT THE BOOKS
-                            user?.role === "admin" && <th>Edit</th>
-                        }
-
-                    </tr>
-                </thead>
-                <tbody>
-                    {
-                        books?.map((book) => (
-                            <tr key={book._id} className="align-middle text-center">
-                                <td>
-                                    <img src="https://eloquentjavascript.net/img/cover.jpg" alt="Eloquent JavaScript" width="100" />
-                                </td>
-                                <td>{book.title}</td>
-                                <td>{book.category}</td>
-                                <td>{book.description}</td>
-                                <td>{book.available}</td>
-                                {
-                                    // ONLY ADMIN CAN EDIT THE BOOKS
-                                    user?.role === "admin" && <td>
-                                        <Button variant="warning" onClick={() => handleEdit(book)}>Edit</Button>
+                            books?.map((book) => (
+                                <tr key={book._id} className="align-middle text-center">
+                                    <td>
+                                        <img src="https://eloquentjavascript.net/img/cover.jpg" alt="Eloquent JavaScript" width="100" />
                                     </td>
-                                }
+                                    <td>{book.title}</td>
+                                    <td>{book.category}</td>
+                                    <td>{book.description}</td>
+                                    <td>{book.available}</td>
+                                    {
+                                        // ONLY ADMIN CAN EDIT THE BOOKS
+                                        user?.role === "admin" && <td>
+                                            <Button variant="warning" onClick={() => handleEdit(book)}>Edit</Button>
+                                        </td>
+                                    }
 
-                            </tr>
+                                </tr>
 
-                        ))
-                    }
-                </tbody>
-            </Table>
+                            ))
+                        }
+                    </tbody>
+                </Table>
+            </div>
             {/* Modal */}
             <Modal show={show} onHide={handleClose}>
                 <Form onSubmit={handleUpdate}>

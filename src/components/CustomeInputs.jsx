@@ -7,5 +7,7 @@ export const CustomeInputs = ({ label, ...rest }) => {
             <Form.Label>{label}</Form.Label>
             <Form.Control {...rest} />
         </Form.Group>
+
+
     )
 }
