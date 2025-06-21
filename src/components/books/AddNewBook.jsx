@@ -1,4 +1,5 @@
 import React from 'react'
+import { toast } from 'react-toastify'
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { CustomeInputs } from '../CustomeInputs'
@@ -7,10 +8,25 @@ import useForm from '@/hooks/useForm';
 import { addNewBook, getBooks } from '@/axio/axioHelper';
 // import { useDispatch, useSelector } from 'react-redux'
 import { setBook } from '@/redux/books/bookSlice';
-const initialState = {}
+const initialState = { coverImage: null }
 const AddNewBook = () => {
     // const dispatch = useDispatch()
     const { form, setForm, handleOnChange } = useForm(initialState);
+
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const allowed = ['image/png', 'image/jpeg', 'image/jpg'];
+        if (!allowed.includes(file.type)) {
+            alert('Please upload only png, jpeg or jpg images.');
+            return;
+        }
+        if (file.size > 2 * 1024 * 1024) {
+            alert('Image size should not exceed 2MB.');
+            return;
+        }
+        setForm({ ...form, coverImage: file });
+    };
     const handleOnSubmit = async (e) => {
         e.preventDefault();
         console.log(form.ExpectedDateAvailable)
@@ -30,7 +46,7 @@ const AddNewBook = () => {
             <hr></hr>
             <div>
                 <Form onSubmit={handleOnSubmit}>
-                    {
+                    { 
                         bookFormFields.map((input) =>
                             <CustomeInputs
                                 key={input.name}
@@ -40,6 +56,10 @@ const AddNewBook = () => {
                             </CustomeInputs>
                         )
                     }
+                    <Form.Group className="mb-3" controlId="bookImage">
+                        <Form.Label>Book Image</Form.Label>
+                        <Form.Control type="file" accept="image/png,image/jpeg,image/jpg" onChange={handleFileChange} />
+                    </Form.Group>
                     <Button variant="primary" type="submit">
                         Submit
                     </Button>

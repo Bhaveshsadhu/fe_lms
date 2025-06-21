@@ -15,6 +15,8 @@ const BookTable = () => {
     const dispatch = useDispatch();
     const [show, setShow] = useState(false);
     const [selectedBook, setSelectedBook] = useState({});
+    const [images, setImages] = useState([]);
+    const [thumbnailIndex, setThumbnailIndex] = useState(null);
     const fetchBooks = async () => {
         try {
             const result = await getBooks();
@@ -42,6 +44,30 @@ const BookTable = () => {
     const handleClose = () => {
         setShow(false);
         setSelectedBook({});
+    };
+    const handleImageUpload = (e) => {
+        const files = Array.from(e.target.files || []);
+        if (files.length + images.length > 5) {
+            alert('You can upload a maximum of 5 images.');
+            return;
+        }
+        const allowed = ['image/png', 'image/jpeg', 'image/jpg'];
+        const validFiles = [];
+        for (const file of files) {
+            if (!allowed.includes(file.type)) {
+                alert('Only png, jpeg or jpg images are allowed.');
+                continue;
+            }
+            if (file.size > 2 * 1024 * 1024) {
+                alert('Each image must be less than 2MB.');
+                continue;
+            }
+            validFiles.push(file);
+        }
+        setImages(prev => [...prev, ...validFiles]);
+    };
+    const handleThumbnailSelect = (index) => {
+        setThumbnailIndex(index);
     };
     // Handle form change
     const handleChange = (e) => {
@@ -202,6 +228,27 @@ const BookTable = () => {
                                 <option value="unavailable">Unavailable</option>
                             </Form.Select>
                         </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Upload Images</Form.Label>
+                            <Form.Control type="file" multiple accept="image/png,image/jpeg,image/jpg" onChange={handleImageUpload} />
+                        </Form.Group>
+                        {images.length > 0 && (
+                            <div className="d-flex flex-wrap">
+                                {images.map((img, idx) => (
+                                    <div key={idx} className="m-2 text-center">
+                                        <img src={URL.createObjectURL(img)} alt="preview" width="80" />
+                                        <Form.Check
+                                            type="radio"
+                                            name="thumbnail"
+                                            label="Thumbnail"
+                                            className="mt-1"
+                                            checked={thumbnailIndex === idx}
+                                            onChange={() => handleThumbnailSelect(idx)}
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+                        )}
 
                     </Modal.Body>
                     <Modal.Footer>
