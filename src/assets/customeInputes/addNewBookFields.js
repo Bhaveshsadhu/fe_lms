@@ -67,11 +67,11 @@ export const bookFormFields = [
         name: "ExpectedDateAvailable",
         min: new Date().toISOString().split("T")[0]  // sets min to today's date
     },
-    {
-        label: "Cover Image File Name",
-        type: "text",
-        required: false,
-        placeholder: "e.g., cover.jpg",
-        name: "coverImage",
-    }
+    // {
+    //     label: "Cover Image File Name",
+    //     type: "text",
+    //     required: false,
+    //     placeholder: "e.g., cover.jpg",
+    //     name: "coverImage",
+    // }
 ];
