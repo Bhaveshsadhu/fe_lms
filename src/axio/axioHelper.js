@@ -271,10 +271,47 @@ export const updateBookByID = async (payLoad) => {
             showToast: true
         }
         const result = await apiProcessor(obj)
-        console.log(result)
         return result;
     } catch (error) {
         return error.message
     }
 
 }
+
+// delete book by id
+export const deleteBookByID = async (payLoad) => {
+    try {
+        console.log(payLoad)
+        const obj = {
+            method: "DELETE",
+            url: API_BOOKS + "/" + payLoad,
+            isPrivateCall: true,
+            showToast: false
+        }
+        const result = await apiProcessor(obj)
+        return result;
+    } catch (error) {
+        return error.message
+    }
+
+}
+
+// Delete an uploaded image file from a book
+export const deleteUploadedImage = async (id, payLoad) => {
+    try {
+        const obj = {
+            method: "DELETE",
+            url: API_BOOKS + "/" + id + "/uploaded-file",
+            isPrivateCall: true,
+            payLoad,
+            showToast: false
+        }
+        // console.log(obj)
+
+        const result = await apiProcessor(obj)
+        return result;
+    } catch (error) {
+        return error.message
+    }
+
+} 

@@ -4,10 +4,11 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify';
-import { addNewBook, getBooks, updateBookByID } from '@/axio/axioHelper';
+import { addNewBook, deleteBookByID, deleteUploadedImage, getBooks, updateBookByID } from '@/axio/axioHelper';
 import { setBook } from '@/redux/books/bookSlice';
 import Modal from 'react-bootstrap/Modal';
 import { CustomeInputs } from '../CustomeInputs';
+import { MdDelete } from "react-icons/md";
 
 const BookTable = () => {
     const { books } = useSelector((state) => state.bookInfo);
@@ -129,6 +130,62 @@ const BookTable = () => {
             toast.error(error.message || "Error while updating");
         }
     };
+
+    // hanldeOnDelete
+    const hanldeOnDelete = async (e) => {
+        try {
+            e.preventDefault();
+            const confirmDelete = window.confirm("Are you sure you want to delete?");
+            if (confirmDelete) {
+
+                const { status, message } = await deleteBookByID(selectedBook._id)
+
+                console.log(status, message)
+
+
+                if (status === "success") {
+                    fetchBooks();
+                    toast.success(message);
+                    setShow(false);
+                    handleClose();
+                } else {
+                    toast.error(message || "Deleted failed");
+                }
+
+
+            }
+        } catch (error) {
+            toast.error(error.message)
+        }
+
+    }
+
+    // deleteThumbImg
+    const deleteThumbImg = async (item) => {
+        try {
+            const confirmDelete = window.confirm("Are you sure you want to delete?");
+            if (confirmDelete) {
+                const obj = {
+                    filePath: item
+                }
+                const { status, message } = await deleteUploadedImage(selectedBook._id, obj)
+                console.log(status, message)
+                if (status === "success") {
+                    toast.success(message)
+                    // Update local state to reflect deletion without full refetch
+                    setSelectedBook((prev) => ({
+                        ...prev,
+                        uploadedFiles: prev.uploadedFiles.filter((p) => p !== item),
+                    }));
+                    fetchBooks();
+                }
+            }
+
+        } catch (error) {
+            toast.error(error.message)
+        }
+
+    }
 
     return (
         <div className='p-5'>
@@ -279,26 +336,32 @@ const BookTable = () => {
                             <Form.Control type="file" multiple accept="image/png,image/jpeg,image/jpg" onChange={handleImageUpload} />
                         </Form.Group>
 
-                        <div className='d-flex'>
+                        <div className='d-flex flex-wrap w-100'>
                             {
                                 selectedBook?.uploadedFiles?.map((item, id) => (
-                                    <div key={id} className='border m-1 p-2'>
-
-                                        <Form.Check
-                                            type="radio"
-                                            name="thumbnail"
-                                            label="Make Thumbnail"
-                                            className="mt-1"
-                                            checked={thumbnailImg === item}
-                                            onChange={() => handleThumbnailImg(item)}
-                                        />
-                                        <img
-                                            src={import.meta.env.VITE_API_URL_IMG + item}
-                                            alt={selectedBook.title}
-                                            className='img-thumbnail border rounded '
-                                            width="100"
-                                            style={{ objectFit: "cover", borderRadius: "4px" }}
-                                        />
+                                    <div key={id} className='d-flex flex-column border m-1 p-2'>
+                                        <div className='d-flex gap-2 fs-0.5'>
+                                            <strong><Form.Check
+                                                type="radio"
+                                                name="thumbnail"
+                                                label="Make Thumbnail"
+                                                className="mt-1"
+                                                checked={thumbnailImg === item}
+                                                onChange={() => handleThumbnailImg(item)}
+                                            />
+                                            </strong>
+                                            <Button variant="danger" onClick={() => deleteThumbImg(item)}><MdDelete /></Button>
+                                        </div>
+                                        <hr></hr>
+                                        <div className='d-flex justify-content-center'>
+                                            <img
+                                                src={import.meta.env.VITE_API_URL_IMG + item}
+                                                alt={selectedBook.title}
+                                                className='img-thumbnail border rounded '
+                                                width="100"
+                                                style={{ objectFit: "cover", borderRadius: "4px" }}
+                                            />
+                                        </div>
                                     </div>
                                 ))
                             }
@@ -308,7 +371,8 @@ const BookTable = () => {
                     </Modal.Body>
                     <Modal.Footer>
                         <Button variant="secondary" onClick={handleClose}>Cancel</Button>
-                        <Button variant="success" type="submit">Update</Button>
+                        <Button variant="warning" type="submit">Update</Button>
+                        <Button variant="danger" type="submit" onClick={hanldeOnDelete}>Delete</Button>
                     </Modal.Footer>
                 </Form>
             </Modal>
