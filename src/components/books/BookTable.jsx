@@ -4,10 +4,11 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify';
-import { getBooks, updateBookByID } from '@/axio/axioHelper';
+import { addNewBook, deleteBookByID, deleteUploadedImage, getBooks, updateBookByID } from '@/axio/axioHelper';
 import { setBook } from '@/redux/books/bookSlice';
 import Modal from 'react-bootstrap/Modal';
 import { CustomeInputs } from '../CustomeInputs';
+import { MdDelete } from "react-icons/md";
 
 const BookTable = () => {
     const { books } = useSelector((state) => state.bookInfo);
@@ -16,7 +17,7 @@ const BookTable = () => {
     const [show, setShow] = useState(false);
     const [selectedBook, setSelectedBook] = useState({});
     const [images, setImages] = useState([]);
-    const [thumbnailIndex, setThumbnailIndex] = useState(null);
+    const [thumbnailImg, setThumbnailImg] = useState("");
     const fetchBooks = async () => {
         try {
             const result = await getBooks();
@@ -28,8 +29,6 @@ const BookTable = () => {
         }
     };
     useEffect(() => {
-
-
         fetchBooks();
     }, [dispatch]);
 
@@ -46,29 +45,31 @@ const BookTable = () => {
         setSelectedBook({});
     };
     const handleImageUpload = (e) => {
-        const files = Array.from(e.target.files || []);
-        if (files.length + images.length > 5) {
-            alert('You can upload a maximum of 5 images.');
-            return;
-        }
+
+        const files = Array.from(e.target.files); // Convert FileList to Array
+        if (!files.length) return;
+
         const allowed = ['image/png', 'image/jpeg', 'image/jpg'];
-        const validFiles = [];
-        for (const file of files) {
+
+        // Validate each file
+        for (let file of files) {
             if (!allowed.includes(file.type)) {
-                alert('Only png, jpeg or jpg images are allowed.');
-                continue;
+                alert('Only PNG, JPEG, or JPG images are allowed.');
+                return;
             }
+
             if (file.size > 2 * 1024 * 1024) {
                 alert('Each image must be less than 2MB.');
-                continue;
+                return;
             }
-            validFiles.push(file);
         }
-        setImages(prev => [...prev, ...validFiles]);
+
+        // Save files to form state
+        // setImages(prev => [...prev, ...files]);
+        setImages(files);
+
     };
-    const handleThumbnailSelect = (index) => {
-        setThumbnailIndex(index);
-    };
+
     // Handle form change
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -77,19 +78,115 @@ const BookTable = () => {
             [name]: value,
         }));
     };
+    // handleThumbnailImg
+    const handleThumbnailImg = (item) => {
+        setThumbnailImg(item)
+        setSelectedBook((prev) => ({
+            ...prev,
+            coverImage: item,
+        }));
+
+    }
     // Handle form submit
     const handleUpdate = async (e) => {
         e.preventDefault();
-        const { status, message, book } = await updateBookByID(selectedBook)
-        if (status === "success") {
-            fetchBooks();
-            toast.success(message);
+
+        try {
+            const formData = new FormData();
+
+            // Append text fields
+            formData.append("_id", selectedBook._id);
+            formData.append("title", selectedBook.title);
+            formData.append("author", selectedBook.author);
+            formData.append("isbn", selectedBook.isbn);
+            formData.append("category", selectedBook.category);
+            formData.append("description", selectedBook.description || "");
+            formData.append("quantity", selectedBook.quantity);
+            formData.append("available", selectedBook.available);
+            formData.append("ExpectedDateAvailable", selectedBook.ExpectedDateAvailable);
+            formData.append("coverImage", thumbnailImg || selectedBook.coverImage);
+
+            // Append existing image paths (important!)
+            (selectedBook.uploadedFiles || []).forEach((existingPath) => {
+                formData.append("existingImages", existingPath); // custom key to handle on backend
+            });
+
+            // Append new image files
+            images.forEach((file) => {
+                formData.append("uploadedFiles", file);
+            });
+
+            // Call your backend
+            const { status, message } = await updateBookByID(formData);
+
+            if (status === "success") {
+                fetchBooks();
+                toast.success(message);
+                handleClose();
+            } else {
+                toast.error(message || "Update failed");
+            }
+        } catch (error) {
+            toast.error(error.message || "Error while updating");
+        }
+    };
+
+    // hanldeOnDelete
+    const hanldeOnDelete = async (e) => {
+        try {
+            e.preventDefault();
+            const confirmDelete = window.confirm("Are you sure you want to delete?");
+            if (confirmDelete) {
+
+                const { status, message } = await deleteBookByID(selectedBook._id)
+
+                console.log(status, message)
+
+
+                if (status === "success") {
+                    fetchBooks();
+                    toast.success(message);
+                    setShow(false);
+                    handleClose();
+                } else {
+                    toast.error(message || "Deleted failed");
+                }
+
+
+            }
+        } catch (error) {
+            toast.error(error.message)
         }
 
-        // console.log("updated data", selectedBook)
-        // You can call your update API here
-        handleClose();
-    };
+    }
+
+    // deleteThumbImg
+    const deleteThumbImg = async (item) => {
+        try {
+            const confirmDelete = window.confirm("Are you sure you want to delete?");
+            if (confirmDelete) {
+                const obj = {
+                    filePath: item
+                }
+                const { status, message } = await deleteUploadedImage(selectedBook._id, obj)
+                console.log(status, message)
+                if (status === "success") {
+                    toast.success(message)
+                    // Update local state to reflect deletion without full refetch
+                    setSelectedBook((prev) => ({
+                        ...prev,
+                        uploadedFiles: prev.uploadedFiles.filter((p) => p !== item),
+                    }));
+                    fetchBooks();
+                }
+            }
+
+        } catch (error) {
+            toast.error(error.message)
+        }
+
+    }
+
     return (
         <div className='p-5'>
 
@@ -125,10 +222,16 @@ const BookTable = () => {
                     </thead>
                     <tbody>
                         {
+
                             books?.map((book) => (
                                 <tr key={book._id} className="align-middle text-center">
                                     <td>
-                                        <img src="https://eloquentjavascript.net/img/cover.jpg" alt="Eloquent JavaScript" width="100" />
+                                        <img
+                                            src={import.meta.env.VITE_API_URL_IMG + book.coverImage}
+                                            alt={book.title}
+                                            width="100"
+                                            style={{ objectFit: "cover", borderRadius: "4px" }}
+                                        />
                                     </td>
                                     <td>{book.title}</td>
                                     <td>{book.category}</td>
@@ -150,7 +253,7 @@ const BookTable = () => {
             </div>
             {/* Modal */}
             <Modal show={show} onHide={handleClose}>
-                <Form onSubmit={handleUpdate}>
+                <Form onSubmit={handleUpdate} encType="multipart/form-data">
                     <Modal.Header closeButton>
                         <Modal.Title>Edit Book</Modal.Title>
                     </Modal.Header>
@@ -222,7 +325,7 @@ const BookTable = () => {
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label>Status</Form.Label>
-                            <Form.Select aria-label="Default select example">
+                            <Form.Select aria-label="Default select example" onChange={handleChange}>
                                 <option value="available">Available</option>
                                 <option value="borrowed">Borrowed</option>
                                 <option value="unavailable">Unavailable</option>
@@ -232,28 +335,44 @@ const BookTable = () => {
                             <Form.Label>Upload Images</Form.Label>
                             <Form.Control type="file" multiple accept="image/png,image/jpeg,image/jpg" onChange={handleImageUpload} />
                         </Form.Group>
-                        {images.length > 0 && (
-                            <div className="d-flex flex-wrap">
-                                {images.map((img, idx) => (
-                                    <div key={idx} className="m-2 text-center">
-                                        <img src={URL.createObjectURL(img)} alt="preview" width="80" />
-                                        <Form.Check
-                                            type="radio"
-                                            name="thumbnail"
-                                            label="Thumbnail"
-                                            className="mt-1"
-                                            checked={thumbnailIndex === idx}
-                                            onChange={() => handleThumbnailSelect(idx)}
-                                        />
+
+                        <div className='d-flex flex-wrap w-100'>
+                            {
+                                selectedBook?.uploadedFiles?.map((item, id) => (
+                                    <div key={id} className='d-flex flex-column border m-1 p-2'>
+                                        <div className='d-flex gap-2 fs-0.5'>
+                                            <strong><Form.Check
+                                                type="radio"
+                                                name="thumbnail"
+                                                label="Make Thumbnail"
+                                                className="mt-1"
+                                                checked={thumbnailImg === item}
+                                                onChange={() => handleThumbnailImg(item)}
+                                            />
+                                            </strong>
+                                            <Button variant="danger" onClick={() => deleteThumbImg(item)}><MdDelete /></Button>
+                                        </div>
+                                        <hr></hr>
+                                        <div className='d-flex justify-content-center'>
+                                            <img
+                                                src={import.meta.env.VITE_API_URL_IMG + item}
+                                                alt={selectedBook.title}
+                                                className='img-thumbnail border rounded '
+                                                width="100"
+                                                style={{ objectFit: "cover", borderRadius: "4px" }}
+                                            />
+                                        </div>
                                     </div>
-                                ))}
-                            </div>
-                        )}
+                                ))
+                            }
+
+                        </div>
 
                     </Modal.Body>
                     <Modal.Footer>
                         <Button variant="secondary" onClick={handleClose}>Cancel</Button>
-                        <Button variant="success" type="submit">Update</Button>
+                        <Button variant="warning" type="submit">Update</Button>
+                        <Button variant="danger" type="submit" onClick={hanldeOnDelete}>Delete</Button>
                     </Modal.Footer>
                 </Form>
             </Modal>

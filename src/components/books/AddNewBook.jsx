@@ -6,35 +6,61 @@ import { CustomeInputs } from '../CustomeInputs'
 import { bookFormFields } from '@/assets/customeInputes/addNewBookFields.js'
 import useForm from '@/hooks/useForm';
 import { addNewBook, getBooks } from '@/axio/axioHelper';
-// import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setBook } from '@/redux/books/bookSlice';
 const initialState = { coverImage: null }
 const AddNewBook = () => {
-    // const dispatch = useDispatch()
+    const dispatch = useDispatch()
     const { form, setForm, handleOnChange } = useForm(initialState);
 
+
     const handleFileChange = (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
+        const files = Array.from(e.target.files); // Convert FileList to Array
+        if (!files.length) return;
+
         const allowed = ['image/png', 'image/jpeg', 'image/jpg'];
-        if (!allowed.includes(file.type)) {
-            alert('Please upload only png, jpeg or jpg images.');
-            return;
+
+        // Validate each file
+        for (let file of files) {
+            if (!allowed.includes(file.type)) {
+                alert('Only PNG, JPEG, or JPG images are allowed.');
+                return;
+            }
+
+            if (file.size > 2 * 1024 * 1024) {
+                alert('Each image must be less than 2MB.');
+                return;
+            }
         }
-        if (file.size > 2 * 1024 * 1024) {
-            alert('Image size should not exceed 2MB.');
-            return;
-        }
-        setForm({ ...form, coverImage: file });
+
+        // Save files to form state
+        setForm({ ...form, coverImage: files }); // or coverImages if multiple
     };
+
     const handleOnSubmit = async (e) => {
         e.preventDefault();
-        console.log(form.ExpectedDateAvailable)
-        const result = await addNewBook(form)
+        const formData = new FormData();
 
+        // Text fields
+        formData.append("title", form.title);
+        formData.append("author", form.author);
+        formData.append("isbn", form.isbn);
+        formData.append("category", form.category);
+        formData.append("description", form.description || "");
+        formData.append("quantity", form.quantity);
+        formData.append("available", form.available);
+        formData.append("ExpectedDateAvailable", form.ExpectedDateAvailable);
+
+        // Image files
+        form.coverImage.forEach((file) => {
+            formData.append("uploadedFiles", file); // Field name must match in multer
+        });
+        // console.log(formData)
+        const result = await addNewBook(formData)
         if (result.status === "success") {
             // get all books and add into redux store
             const books = await getBooks()
+            console.log(books)
             if (books.status === "success") {
                 dispatch(setBook([books.books]))
             }
@@ -45,8 +71,8 @@ const AddNewBook = () => {
             <h2>Add New Book</h2>
             <hr></hr>
             <div>
-                <Form onSubmit={handleOnSubmit}>
-                    { 
+                <Form onSubmit={handleOnSubmit} encType="multipart/form-data">
+                    {
                         bookFormFields.map((input) =>
                             <CustomeInputs
                                 key={input.name}
@@ -58,7 +84,7 @@ const AddNewBook = () => {
                     }
                     <Form.Group className="mb-3" controlId="bookImage">
                         <Form.Label>Book Image</Form.Label>
-                        <Form.Control type="file" accept="image/png,image/jpeg,image/jpg" onChange={handleFileChange} />
+                        <Form.Control type="file" multiple accept="image/png,image/jpeg,image/jpg" onChange={handleFileChange} />
                     </Form.Group>
                     <Button variant="primary" type="submit">
                         Submit
