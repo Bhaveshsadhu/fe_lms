@@ -6,12 +6,16 @@ import { Link } from 'react-router-dom';
 import { SlLogin } from "react-icons/sl";
 import { SiGnuprivacyguard } from "react-icons/si";
 import { TbLockPassword } from "react-icons/tb";
-import logo from '@/assets/LMS.png'
 import { useDispatch, useSelector } from 'react-redux';
 import { AiFillDashboard } from "react-icons/ai";
 import { TbLogout } from "react-icons/tb";
 import { logoutUser } from '../axio/axioHelper';
 import { setUser } from '../redux/user/userSlice';
+import InputGroup from 'react-bootstrap/InputGroup';
+import Form from 'react-bootstrap/Form';
+import { FaSearch } from "react-icons/fa";
+import { Button } from 'react-bootstrap';
+import { MdLocalLibrary } from "react-icons/md";
 
 
 const Header = () => {
@@ -32,31 +36,48 @@ const Header = () => {
 
     }
     return (
-        <Navbar expand="md" className="bg-dark" variant='dark'>
+        <Navbar expand="md" className='main-header'>
             <Container>
                 <Navbar.Brand>
-                    <Link to="/" ><img src={logo} className='border rounded' width="50px" alt="LMS"></img></Link>
+                    <Link to="/" ><MdLocalLibrary size={68} className='logo' /></Link>
+
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
-                    <Nav className="ms-auto">
+
+                    <Nav className="ms-auto mx-2">
+                        <Form className='me-5'>
+                            <InputGroup>
+
+                                <Form.Control
+                                    placeholder="Search Book"
+                                    aria-label="Search Book"
+                                    aria-describedby="basic-addon1"
+                                />
+                                <Button id="searchbook" variant="danger"><FaSearch /></Button>
+                            </InputGroup>
+                        </Form>
+
                         {
                             user?._id ?
                                 (<>
-                                    <Link className="nav-link" to="/user"> <AiFillDashboard /> Dashboard</Link>
-                                    <Link className="nav-link" to="/" onClick={handleLogout}><TbLogout /> Logout</Link >
+                                    <Link className="nav-link fw-bold header-links" to="/user"> <AiFillDashboard /> Dashboard</Link>
+                                    <Link className="nav-link fw-bold header-links" to="/" onClick={handleLogout}><TbLogout /> Logout</Link >
                                     {/* <Link className="nav-link" to="/forgetpassword"><TbLockPassword /> ForgetPassword</Link> */}
                                 </>)
                                 :
                                 (<>
-                                    <Link className="nav-link" to="/login"><SlLogin /> Login</Link>
-                                    <Link className="nav-link" to="/signup"><SiGnuprivacyguard /> SignUp</Link >
-                                    <Link className="nav-link" to="/forgetpassword"><TbLockPassword /> ForgetPassword</Link>
+                                    <Link className="nav-link fw-bold header-links" to="/login"><SlLogin /> Login</Link>
+                                    <Link className="nav-link fw-bold header-links" to="/signup"><SiGnuprivacyguard /> SignUp</Link >
+                                    <Link className="nav-link fw-bold header-links" to="/forgetpassword"><TbLockPassword /> ForgetPassword</Link>
                                 </>)
                         }
+
                     </Nav>
                 </Navbar.Collapse>
+
             </Container>
+
         </Navbar>
     )
 }

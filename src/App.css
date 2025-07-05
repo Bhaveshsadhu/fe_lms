@@ -1,3 +1,56 @@
+:root {
+    --primary-color: #954C2E;
+    --secondary-color: #EFE4D2;
+}
+
+.primary {
+    color: var(--primary-color)
+}
+
+.button-color {
+    color: white !important;
+    background: var(--primary-color) !important;
+}
+
+.delius-unicase-regular {
+    font-family: "Delius Unicase", cursive;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.delius-unicase-bold {
+    font-family: "Delius Unicase", cursive;
+    font-weight: 700;
+    font-style: normal;
+}
+
+/* Header start */
+.main-header {
+    background-color: var(--primary-color);
+}
+
+.header-links {
+    color: var(--secondary-color) !important;
+}
+
+.logo {
+    color: orange;
+}
+
+.nav-link {
+
+    transition: all 0.5s ease;
+}
+
+.nav-link:hover {
+    color: orange !important;
+    transform: scale(1.2);
+}
+
+/* Header ends */
+
+/* main section starts */
+
 .main-section {
     min-height: 80vh;
     width: calc(100% - 200px);
@@ -5,16 +58,128 @@
 
 .main-section-public {
     min-height: 80vh;
+    background-color: var(--secondary-color);
 }
 
-/* .main-section .main {
-    width: 100%;
-} */
+.title-main {
+    color: var(--primary-color);
+    position: relative;
+    display: inline-block;
+}
+
+.title-main::after {
+    content: "";
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 720px;
+    height: 1px;
+    background-color: var(--primary-color);
+}
+
+.hero-content {
+    color: black
+}
+
+/* main section ends */
+
+/* cards section start */
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+    /* space between cards */
+    padding: 1rem;
+    /* optional outer padding */
+}
+
+.cards-title {
+    position: relative;
+    display: inline-block;
+    color: var(--primary-color);
+}
+
+.cards-title::after {
+    content: "";
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 220px;
+    height: 1px;
+    background-color: var(--primary-color);
+}
+
+.card-link {
+    text-decoration: none;
+    font-size: 1rem;
+    color: var(--primary-color)
+}
+
+.cards-carousel {
+    display: flex;
+    overflow: hidden;
+    /* hide overflow */
+    scroll-behavior: smooth;
+    /* smooth JS scroll */
+    /* hide native scrollbar if you like: */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.cards-carousel::-webkit-scrollbar {
+    display: none;
+}
+
+.cards-carousel-item {
+    flex: 0 0 25%;
+    /* 4 cards per view */
+    box-sizing: border-box;
+    padding: 0 0.5rem;
+    /* 1rem total gap between items */
+}
+
+/* break to 2 columns at md */
+@media (max-width: 992px) {
+    .cards-carousel-item {
+        flex: 0 0 50%;
+    }
+}
+
+/* break to 1 column at sm */
+@media (max-width: 576px) {
+    .cards-carousel-item {
+        flex: 0 0 100%;
+    }
+}
+
+
+/* cards section ends */
+
+/* stat start */
+.stat-box {
+    /* background: var(--primary-color); */
+    color: var(--primary-color);
+    width: 25%;
+    height: 20%;
+}
+
+/* stat ends */
+
+/* ABOUT US */
+.aboutus-title {
+    color: var(--primary-color)
+}
+
+/* END ABOUT US */
+
+
 
 .singin {
     /* height: 100vh; */
     width: 100%;
-    background: url('./assets/lib.jpg');
+    /* background: url('./assets/lib.jpg'); */
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -22,3 +187,11 @@
     overflow: hidden;
 
 }
+
+/* footer start */
+.footer {
+    background: var(--primary-color);
+    color: var(--secondary-color)
+}
+
+/* footer ends */
