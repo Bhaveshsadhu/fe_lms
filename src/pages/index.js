@@ -20,6 +20,7 @@ export { default as DashBoardPage } from "./dashboard/DashBoardPage";
 
 // from HomePage
 export { default as HomePage } from "./home/HomePage";
+export { default as BookDetails } from "./public/BookDetails"
 
 // from reivews
 export { default as ReviewPage } from "./reviews/ReviewPage";

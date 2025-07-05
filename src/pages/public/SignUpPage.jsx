@@ -47,7 +47,7 @@ const SignUpPage = () => {
         <div className='d-flex justify-content-center'>
             <Form style={{ width: "450px" }} className='card p-5 mt-5 shadow-lg'
                 onSubmit={handleOnSubmit}>
-                <h1>Join our Library Community</h1>
+                <h1>Join our Library</h1>
 
                 {
                     signUpInputes.map((input) =>
