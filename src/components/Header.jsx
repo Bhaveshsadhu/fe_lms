@@ -14,7 +14,8 @@ import { setUser } from '../redux/user/userSlice';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Form from 'react-bootstrap/Form';
 import { FaSearch } from "react-icons/fa";
-import { Button } from 'react-bootstrap';
+import { Badge, Button } from 'react-bootstrap';
+import { BsCart3 } from "react-icons/bs";
 import { MdLocalLibrary } from "react-icons/md";
 
 
@@ -70,15 +71,21 @@ const Header = () => {
                                     <Link className="nav-link fw-bold header-links" to="/login"><SlLogin /> Login</Link>
                                     <Link className="nav-link fw-bold header-links" to="/signup"><SiGnuprivacyguard /> SignUp</Link >
                                     <Link className="nav-link fw-bold header-links" to="/forgetpassword"><TbLockPassword /> ForgetPassword</Link>
+
                                 </>)
+
                         }
 
                     </Nav>
                 </Navbar.Collapse>
-
+                < Link className="nav-link fw-bold header-links fs-1" to="/"> <BsCart3 /><Badge bg="secondary">9</Badge></Link>
+                <Button variant="primary">
+                    Profile <Badge bg="secondary">9</Badge>
+                    <span className="visually-hidden">unread messages</span>
+                </Button>
             </Container>
 
-        </Navbar>
+        </Navbar >
     )
 }
 

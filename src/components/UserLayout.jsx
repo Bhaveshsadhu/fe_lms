@@ -14,9 +14,7 @@ const UsertLayout = () => {
 
             <div className='d-flex'>
                 <div className='bg-dark text-white p-3' style={{ width: "200px" }}>
-                    <div>Welcome</div>
-                    <div><strong>Bhavesh Sadhu</strong></div>
-                    <hr></hr>
+
                     <SideBar></SideBar>
                 </div>
 

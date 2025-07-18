@@ -260,6 +260,22 @@ export const getBooks = async () => {
     }
 
 }
+// GET all books to display
+export const getAllBooksToDisplay = async () => {
+    try {
+        const obj = {
+            method: "GET",
+            url: API_BOOKS + "/getdisplaybooks",
+            isPrivateCall: false,
+            showToast: true
+        }
+        const result = await apiProcessor(obj)
+        // console.log(result)
+        return result;
+    } catch (error) {
+        return error.message
+    }
+}
 // UPDATE BOOK BY ID
 export const updateBookByID = async (payLoad) => {
     try {
