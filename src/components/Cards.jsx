@@ -3,15 +3,26 @@ import Card from 'react-bootstrap/Card';
 import StarRating from './StarRating';
 import { Button } from 'react-bootstrap';
 import { BsCart3 } from "react-icons/bs";
+import { useDispatch, useSelector } from 'react-redux';
+import { addToCart } from '@/redux/cart/cartSlice';
 
 
 
-const Cards = ({ coverImage, title, description, rating, author }) => {
+const Cards = (card) => {
+    // { coverImage, title, description, rating, author }
+    const { coverImage, title, description, rating, author } = card
+    const dispatch = useDispatch()
+
+
+
     // utils/truncate.js
     function truncateWords(str = "", numWords = 20) {
         const words = str.split(/\s+/);
         if (words.length <= numWords) return str;
         return words.slice(0, numWords).join(" ") + "...";
+    }
+    const handleOnCartClick = () => {
+        dispatch(addToCart(card))
     }
 
     return (
@@ -25,7 +36,7 @@ const Cards = ({ coverImage, title, description, rating, author }) => {
                         {truncateWords(description, 10)}
                     </Card.Text>
                     <div className="d-grid">
-                        <Button className="button-color" variant="outline-primary">Add To Cart <BsCart3 /></Button>
+                        <Button className="button-color" variant="outline-primary" onClick={handleOnCartClick}>Add To Cart <BsCart3 /></Button>
                     </div>
                     <span className='fw-bold'><StarRating rating={rating} /></span>
 

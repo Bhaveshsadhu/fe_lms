@@ -22,6 +22,7 @@ import { MdLocalLibrary } from "react-icons/md";
 const Header = () => {
     const { user } = useSelector((state) => state.userInfo)
     const dispatch = useDispatch()
+    const { items } = useSelector((state) => state.cartInfo)
     const handleLogout = async (e) => {
         e.preventDefault();
 
@@ -78,11 +79,16 @@ const Header = () => {
 
                     </Nav>
                 </Navbar.Collapse>
-                < Link className="nav-link fw-bold header-links fs-1" to="/"> <BsCart3 /><Badge bg="secondary">9</Badge></Link>
-                <Button variant="primary">
-                    Profile <Badge bg="secondary">9</Badge>
-                    <span className="visually-hidden">unread messages</span>
-                </Button>
+                <div className='position-relative'>
+                    < Link className="nav-link fw-bold header-links fs-1" to="/cart"> <BsCart3 /></Link>
+                    <div className='position-absolute top-0 end-0'>
+                        <Badge pill bg="warning" text="dark">
+                            {items.length}
+                        </Badge>
+                    </div>
+                </div>
+
+
             </Container>
 
         </Navbar >
