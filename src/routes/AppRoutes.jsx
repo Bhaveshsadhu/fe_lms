@@ -15,7 +15,8 @@ import {
     DefaultLayout,
     NewBookPage,
     EditBookPage,
-    BookDetails
+    BookDetails,
+    Cart
 
 } from "@pages/index"
 
@@ -34,6 +35,8 @@ const AppRoutes = () => {
                 <Route path="/activate-user" element={<VerifyUser></VerifyUser>} />
                 <Route path="/reset-password" element={<ResetPassword></ResetPassword>} />
                 <Route path="/book-details" element={<BookDetails></BookDetails>} />
+                <Route path="/cart" element={<Cart></Cart>} />
+
             </Route>
 
             {/* Private Page */}

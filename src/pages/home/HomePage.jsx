@@ -31,7 +31,7 @@ const HomePage = () => {
                 new Date(book.createdAt) >= oneMonthAgo
             );
             setBookObj(recentBooks)
-            console.log(recentBooks)
+            // console.log(recentBooks)
 
         } catch (error) {
         }

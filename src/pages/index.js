@@ -13,6 +13,7 @@ export { default as EditBookPage } from "./books/EditBookPage";
 export { default as NewBookPage } from "./books/NewBookPage";
 export { default as Books } from "./books/Books";
 export { default as BorrowBooks } from "./books/BorrowBooks";
+export { default as Cart } from "./public/Cart"
 
 // from dashboard
 export { default as DashBoardPage } from "./dashboard/DashBoardPage";
