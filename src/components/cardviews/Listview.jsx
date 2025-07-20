@@ -1,10 +1,13 @@
 import { Image, Button, Table } from 'react-bootstrap'
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { FaTrash } from 'react-icons/fa'
 import { AiOutlineMinus, AiOutlinePlus } from 'react-icons/ai'
+import { decreaseQuantity, increaseQuantity, removeFromCart } from '@/redux/cart/cartSlice';
 
 const Listview = () => {
     const { items } = useSelector((state) => state.cartInfo)
+    // console.log(items)
+    const dispatch = useDispatch()
     return (
 
         <Table borderless responsive>
@@ -24,7 +27,7 @@ const Listview = () => {
                                 <Button
                                     variant="light"
                                     size="sm"
-                                    onClick={() => dispatch(removeFromCart(item.bookId))}
+                                    onClick={() => dispatch(removeFromCart(item._id))}
                                 >
                                     <FaTrash />
                                 </Button>
@@ -32,7 +35,8 @@ const Listview = () => {
                                     variant="outline-secondary"
                                     size="sm"
                                     className="mx-2"
-                                    onClick={() => dispatch(decrementQuantity(item.bookId))}
+                                    onClick={() => dispatch(decreaseQuantity(item._id))}
+
                                 >
                                     <AiOutlineMinus />
                                 </Button>
@@ -41,7 +45,7 @@ const Listview = () => {
                                     variant="outline-secondary"
                                     size="sm"
                                     className="mx-2"
-                                    onClick={() => dispatch(incrementQuantity(item.bookId))}
+                                    onClick={() => dispatch(increaseQuantity(item._id))}
                                 >
                                     <AiOutlinePlus />
                                 </Button>
