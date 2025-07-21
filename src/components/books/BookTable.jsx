@@ -192,16 +192,7 @@ const BookTable = () => {
 
             <div className='d-flex justify-content-between'>
                 <h2>All Books</h2>
-                <div>
-                    <Form className='d-flex justify-content-between'>
-                        <Form.Group className="mx-3">
-                            <Form.Control type="email" placeholder="Search Books By Name" />
-                        </Form.Group>
-                        <Button variant="primary" type="submit">
-                            Search
-                        </Button>
-                    </Form>
-                </div>
+
             </div>
             <hr></hr>
             <div className="table-responsive">

@@ -1,5 +1,4 @@
 import React from 'react'
-import { toast } from 'react-toastify'
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { CustomeInputs } from '../CustomeInputs'
@@ -47,9 +46,12 @@ const AddNewBook = () => {
         formData.append("isbn", form.isbn);
         formData.append("category", form.category);
         formData.append("description", form.description || "");
-        formData.append("quantity", form.quantity);
-        formData.append("available", form.available);
+        // formData.append("quantity", form.quantity);
+        formData.append("availableQuantity", form.availableQuantity);
         formData.append("ExpectedDateAvailable", form.ExpectedDateAvailable);
+        formData.append("pubDate", form.pubDate);
+
+
 
         // Image files
         form.coverImage.forEach((file) => {

@@ -1,25 +1,34 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Container, Row, Col, Button, Form } from 'react-bootstrap'
-
 import { useSelector } from 'react-redux';
 import Listview from '@/components/cardviews/Listview';
 import EmptyCart from '@/components/cardviews/EmptyCart';
 import { IoCardOutline } from "react-icons/io5";
 import { FaListUl } from "react-icons/fa";
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Cardview from '@/components/cardviews/Cardview';
-import { BsCheckCircleFill } from 'react-icons/bs'
 
 
 
 const Cart = () => {
     const { items } = useSelector((state) => state.cartInfo)
     const [view, setView] = useState("list-View")
+    const { user } = useSelector((state) => state.userInfo)
+    const navigate = useNavigate()
     // useEffect(() => {
     //     // console.log(`Items in cart :${items.length}`)
     //     // console.log(items)
     //     console.log("selected view is ", view)
     // }, [view])
+
+    const handleOnCheckOut = () => {
+        if (user?._id) {
+            alert("User Exist")
+        }
+        else {
+            navigate("/login")
+        }
+    }
 
 
     return (
@@ -54,7 +63,7 @@ const Cart = () => {
                         <div className="border rounded p-4 bg-light" style={{ maxWidth: '320px' }}>
                             <h5 className="mb-3">Checkout</h5>
                             <p>Total Of Books: {items.length}</p>
-                            <Button variant="warning" className="w-100"> Proceed to Checkout</Button>
+                            <Button variant="warning" className="w-100" onClick={handleOnCheckOut}> Proceed to Checkout</Button>
                         </div>
                     </Col>
                 </Row>
