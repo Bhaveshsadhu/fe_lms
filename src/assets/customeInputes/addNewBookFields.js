@@ -41,21 +41,21 @@ export const bookFormFields = [
         cols: 10
     },
 
-    {
-        label: "Total Quantity *",
-        type: "number",
-        required: true,
-        placeholder: "Enter total quantity",
-        name: "quantity",
-        min: 0,
-        max: 50
-    },
+    // {
+    //     label: "Total Quantity *",
+    //     type: "number",
+    //     required: true,
+    //     placeholder: "Enter total quantity",
+    //     name: "quantity",
+    //     min: 0,
+    //     max: 50
+    // },
     {
         label: "Available Quantity *",
         type: "number",
         required: true,
         placeholder: "Enter available quantity",
-        name: "available",
+        name: "availableQuantity",
         min: 0,
         max: 50
     },
@@ -66,6 +66,14 @@ export const bookFormFields = [
         placeholder: "Expected Date Available",
         name: "ExpectedDateAvailable",
         min: new Date().toISOString().split("T")[0]  // sets min to today's date
+    },
+    {
+        label: "Publication Date *",
+        type: "date",
+        required: true,
+        placeholder: "Publication Date",
+        name: "pubDate",
+        max: new Date().toISOString().split("T")[0]
     },
     // {
     //     label: "Cover Image File Name",

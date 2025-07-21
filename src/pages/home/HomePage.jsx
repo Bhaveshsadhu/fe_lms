@@ -6,34 +6,38 @@ import Stat from '@/components/Stat'
 import AboutUs from '@/components/AboutUs'
 import LibraryBenefits from '@/components/BenefitList'
 import { getAllBooksToDisplay } from '@/axio/axioHelper'
+import { useDispatch } from 'react-redux'
+import { setBook } from '@/redux/books/bookSlice'
 
 
 const HomePage = () => {
-    // const bookObj = Array(8).fill().map(() => ({
-    //     thumbimg,
-    //     title: "Java Programming",
-    //     description:
-    //         "Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque dolores accusamus ratione consequuntur placeat temporibus ab laudantium quae nulla nostrum?",
-    //     rating: "*****",
-    //     author: "Bhavesh",
-    // }))
-    const [bookObj, setBookObj] = useState([])
+
+    const [recentBookObj, setrecentBookObj] = useState([])
+    const [allBookObj, setAllBookObj] = useState([])
+    const dispatch = useDispatch();
+
 
     const fetchBooks = async () => {
         try {
-            const { books } = await getAllBooksToDisplay()
-            // compute one-month-ago
-            const oneMonthAgo = new Date();
-            oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+            const { books, status } = await getAllBooksToDisplay()
+            if (status === "success") {
+                setAllBookObj(books)
+                dispatch(setBook(books));
+                // compute one-month-ago
+                const oneMonthAgo = new Date();
+                oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
 
-            // keep only books created after that date
-            const recentBooks = books.filter(book =>
-                new Date(book.createdAt) >= oneMonthAgo
-            );
-            setBookObj(recentBooks)
-            // console.log(recentBooks)
+                // keep only books created after that date
+                const recentBooks = books.filter(book =>
+                    new Date(book.createdAt) >= oneMonthAgo
+                );
+                setrecentBookObj(recentBooks)
+                // console.log(recentBooks)
+            }
 
         } catch (error) {
+            toast.error(error.message || "Failed to fetch books");
+
         }
     }
 
@@ -45,7 +49,8 @@ const HomePage = () => {
         <div>
             <Hero></Hero>
             {/* New Added Books */}
-            <DisplayCards title="New Added Books" bookObj={bookObj} />
+            <DisplayCards title="New Added Books" bookObj={recentBookObj} />
+            <DisplayCards title="All Books" bookObj={allBookObj} />
             <Stat></Stat>
             <AboutUs></AboutUs>
             <LibraryBenefits></LibraryBenefits>

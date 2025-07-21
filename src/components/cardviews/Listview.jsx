@@ -15,7 +15,7 @@ const Listview = () => {
                 {items.map(item => (
                     <tr key={item._id} className="align-middle py-4 border-bottom">
                         <td style={{ width: '100px' }}>
-                            <Image src={item.coverImage} alt={item.title} fluid thumbnail />
+                            <Image src={import.meta.env.VITE_API_URL_IMG + item.coverImage} alt={item.title} fluid thumbnail />
                         </td>
                         <td>
                             <h5 className="mb-1">{item.title}</h5>

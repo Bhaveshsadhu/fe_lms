@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Card, Button, Row, Col } from 'react-bootstrap'
 import { FaTrash } from 'react-icons/fa'
 import { AiOutlineMinus, AiOutlinePlus } from 'react-icons/ai'
+import { decreaseQuantity, increaseQuantity, removeFromCart } from '@/redux/cart/cartSlice';
+
 // import {
 //     removeFromCart,
 //     decrementQuantity,
@@ -24,7 +26,8 @@ export default function Cardview() {
                     <Card className="h-100 p-2">
                         <Card.Img
                             variant="top"
-                            src={item.coverImage}
+                            src={import.meta.env.VITE_API_URL_IMG + item.coverImage}
+
                             alt={item.title}
                             style={{ objectFit: 'cover', height: '200px' }}
                         />
@@ -39,7 +42,7 @@ export default function Cardview() {
                                     <Button
                                         variant="light"
                                         size="sm"
-                                    // onClick={() => dispatch(removeFromCart(item._id))}
+                                        onClick={() => dispatch(removeFromCart(item._id))}
                                     >
                                         <FaTrash />
                                     </Button>
@@ -47,7 +50,7 @@ export default function Cardview() {
                                         variant="outline-secondary"
                                         size="sm"
                                         className="mx-2"
-                                    // onClick={() => dispatch(decrementQuantity(item._id))}
+                                        onClick={() => dispatch(decreaseQuantity(item._id))}
                                     >
                                         <AiOutlineMinus />
                                     </Button>
@@ -56,7 +59,7 @@ export default function Cardview() {
                                         variant="outline-secondary"
                                         size="sm"
                                         className="ms-2"
-                                    // onClick={() => dispatch(incrementQuantity(item._id))}
+                                        onClick={() => dispatch(increaseQuantity(item._id))}
                                     >
                                         <AiOutlinePlus />
                                     </Button>
