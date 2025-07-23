@@ -138,14 +138,21 @@ const Header = () => {
                 </Navbar.Collapse>
 
                 {/* --- Cart Icon --- */}
-                <div className="position-relative">
-                    <Link className="nav-link fw-bold header-links fs-1" to="/cart">
-                        <BsCart3 />
-                    </Link>
-                    <Badge pill bg="warning" text="dark" className="position-absolute top-0 end-0">
-                        {items.length}
-                    </Badge>
-                </div>
+                {
+                    user?.role === "admin"
+                        ? <div>
+                        </div>
+                        :
+                        <div className="position-relative">
+                            <Link className="nav-link fw-bold header-links fs-1" to="/cart">
+                                <BsCart3 />
+                            </Link>
+                            <Badge pill bg="warning" text="dark" className="position-absolute top-0 end-0">
+                                {items.length}
+                            </Badge>
+                        </div>
+                }
+
             </Container>
         </Navbar>
     );

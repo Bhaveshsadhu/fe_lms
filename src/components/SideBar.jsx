@@ -20,16 +20,16 @@ const SideBar = () => {
                 user?.role?.toLowerCase() === "admin" ?
                     <Stack gap={3}>
                         <div className="p-2">
-                            <Link className='nav-link' to="user-profile" >Profile</Link>
+                            <Link className='nav-link' to="/user" >Dashboard</Link>
                         </div>
                         <div className="p-2">
-                            <Link className='nav-link' to="user-alluser" >All User</Link>
+                            <Link className='nav-link' to="manage-members" >Manage Members</Link>
                         </div>
 
                         <div className="p-2">
                             {/* Books Main Link */}
                             <div className="nav-link fw-bold" onClick={toggleBooks} style={{ cursor: 'pointer' }}>
-                                📚 Books {isBooksOpen ? '▾' : '▸'}
+                                📚 Manage Books {isBooksOpen ? '▾' : '▸'}
                             </div>
 
                             {/* Sub-menu */}
@@ -41,19 +41,31 @@ const SideBar = () => {
                                 </div>
                             )}
                         </div>
+                        <div className="p-2">
+                            <Link className='nav-link' to="book-requests" >Book Requests</Link>
+                        </div>
+                        <div className="p-2">
+                            <Link className='nav-link' to="review-approval" >Review Approval</Link>
+                        </div>
+                        <div className="p-2">
+                            <Link className='nav-link' to="reports" >Reports</Link>
+                        </div>
+                        <div className="p-2">
+                            <Link className='nav-link' to="settings" >Settings</Link>
+                        </div>
 
                     </Stack>
                     :
                     // If user is Not Admin
                     <Stack gap={3}>
                         <div className="p-2">
-                            <Link className='nav-link' to="user-profile" >Profile</Link>
+                            <Link className='nav-link' to="user-profile" >Dashboard</Link>
                         </div>
                         <div className="p-2">
-                            <Link className='nav-link' to="user-alluser" >Borrow History</Link>
+                            <Link className='nav-link' to="borrow-history" >Borrow History</Link>
                         </div>
                         <div className="p-2">
-                            <Link className='nav-link' to="user-alluser" >Submit Review</Link>
+                            <Link className='nav-link' to="submit-review" >Submit Review</Link>
                         </div>
 
 

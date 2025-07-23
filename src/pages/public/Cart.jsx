@@ -23,7 +23,8 @@ const Cart = () => {
 
     const handleOnCheckOut = () => {
         if (user?._id) {
-            alert("User Exist")
+            // alert("User Exist")
+            navigate("/user/checkout")
         }
         else {
             navigate("/login")

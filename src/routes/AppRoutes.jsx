@@ -9,14 +9,21 @@ import {
     AllUsers,
     UserLayout,
     Books,
-    BorrowBooks,
     VerifyUser,
     ResetPassword,
     DefaultLayout,
     NewBookPage,
     EditBookPage,
     BookDetails,
-    Cart
+    Cart,
+    BorrowHistory,
+    SubmitReview,
+    ManageMembers,
+    BookRequestsPage,
+    ReviewsApproval,
+    ReportsPage,
+    SettingsPage,
+    ProceedToCheckout
 
 } from "@pages/index"
 
@@ -47,8 +54,17 @@ const AppRoutes = () => {
                 <Route path="books" element={<Books></Books>} />
                 {/* <Route path="user-booksborrows" element={<BorrowBooks></BorrowBooks>} /> */}
                 <Route path="books/add" element={<NewBookPage></NewBookPage>} />
-                <Route path="books/borrow" element={<BorrowBooks></BorrowBooks>} />
+                {/* <Route path="books/borrow" element={<BorrowBooks></BorrowBooks>} /> */}
                 <Route path="books/edit" element={<EditBookPage></EditBookPage>} />
+                <Route path="borrow-history" element={<BorrowHistory></BorrowHistory>} />
+                <Route path="submit-review" element={<SubmitReview></SubmitReview>} />
+                <Route path="manage-members" element={<ManageMembers></ManageMembers>} />
+                <Route path="book-requests" element={<BookRequestsPage></BookRequestsPage>} />
+                <Route path="review-approval" element={<ReviewsApproval></ReviewsApproval>} />
+                <Route path="reports" element={<ReportsPage></ReportsPage>} />
+                <Route path="settings" element={<SettingsPage></SettingsPage>} />
+                <Route path="checkout" element={<ProceedToCheckout></ProceedToCheckout>} />
+
 
                 {/* <Route path="books/borrow" element={<BorrowBooks></BorrowBooks>} /> */}
 
