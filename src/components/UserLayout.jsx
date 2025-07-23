@@ -19,7 +19,7 @@ const UsertLayout = () => {
                 </div>
 
                 {/* Main sections */}
-                <main className='main-section bg-secondary'>
+                <main className='main-section'>
                     <Outlet />
                 </main>
 
