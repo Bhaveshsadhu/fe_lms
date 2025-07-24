@@ -330,4 +330,24 @@ export const deleteUploadedImage = async (id, payLoad) => {
         return error.message
     }
 
+}
+
+// Borrow Books
+export const borrowBooks = async (payLoad) => {
+    try {
+        const obj = {
+            method: "POST",
+            url: API_BOOKS + "/borrow",
+            isPrivateCall: true,
+            payLoad,
+            showToast: false
+        }
+        // console.log(obj)
+
+        const result = await apiProcessor(obj)
+        return result;
+    } catch (error) {
+        return error.message
+    }
+
 } 

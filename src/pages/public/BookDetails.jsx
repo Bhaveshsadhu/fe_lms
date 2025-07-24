@@ -19,25 +19,23 @@ import {
 } from 'react-bootstrap';
 import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
 import BreadcrumbComponent from '@/components/BreadcrumbComponent';
+import { toast } from 'react-toastify';
 
 export default function BookDetail() {
     const location = useLocation();
     const dispatch = useDispatch()
     const { card } = location.state || {};
-    const { title, author, rating, isbn13, description, reviews, pubDate, coverImage } = card
+    const { title, author, rating, isbn, description, reviews, pubDate, coverImage } = card
     const ratingInt = parseInt(rating, 10)
-    // pubDate = '1 July 2015';
-    // const title =
-    //     'Computer Programming';
-    // const author = 'Bhavesh Sadhu';
-    // const rating = 4.6;
-    // const reviews = 9225;
-    // const pubDate = '1 July 2015';
-    // const isbn10 = '01234567890';
-    // const isbn13 = '978-10254789654';
+
 
     const handleOnCartClick = () => {
-        dispatch(addToCart(card))
+        if (card.availableQuantity >= 1) {
+            dispatch(addToCart(card))
+        }
+        else {
+            toast.warning(`Expected Available Date: " ${formatDateToDDMMYYYY(card.ExpectedDateAvailable)}`)
+        }
     }
 
     const renderStars = (r) => {
@@ -61,6 +59,14 @@ export default function BookDetail() {
             </>
         );
     };
+    function formatDateToDDMMYYYY(dateString) {
+        const date = new Date(dateString);
+        const day = String(date.getUTCDate()).padStart(2, '0');
+        const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // Months are zero-based
+        const year = date.getUTCFullYear();
+        return `${day}/${month}/${year}`;
+    }
+
 
     return (
         <Container className="py-5">
@@ -132,13 +138,13 @@ export default function BookDetail() {
                             <Card>
                                 <ListGroup variant="flush">
                                     <ListGroup.Item>
-                                        <strong>Publication date:</strong> {pubDate}
+                                        <strong>Publication date:</strong> {formatDateToDDMMYYYY(pubDate)}
                                     </ListGroup.Item>
                                     {/* <ListGroup.Item>
                                         <strong>ISBN-10:</strong> {isbn10}
                                     </ListGroup.Item> */}
                                     <ListGroup.Item>
-                                        <strong>ISBN-13:</strong> {isbn13}
+                                        <strong>ISBN-13:</strong> {isbn}
                                     </ListGroup.Item>
                                     {/* <ListGroup.Item>
                                         <Form.Group controlId="quantitySelect">
