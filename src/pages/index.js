@@ -36,6 +36,8 @@ export { default as ReviewsApproval } from "./users/ReviewsApproval";
 export { default as ReportsPage } from "./users/ReportsPage";
 export { default as SettingsPage } from "./users/SettingsPage";
 export { default as ProceedToCheckout } from "./users/ProceedToCheckout";
+export { default as ThankYouPage } from "./users/ThankYouPage";
+
 
 
 

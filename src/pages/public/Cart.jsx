@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Container, Row, Col, Button, Form } from 'react-bootstrap'
 import { useSelector } from 'react-redux';
 import Listview from '@/components/cardviews/Listview';
@@ -24,13 +24,15 @@ const Cart = () => {
     const handleOnCheckOut = () => {
         if (user?._id) {
             // alert("User Exist")
-            navigate("/user/checkout")
+            navigate("/user/checkout", { state: items })
         }
         else {
             navigate("/login")
         }
     }
-
+    useEffect(() => {
+        setView("list-view")
+    }, [view])
 
     return (
         items.length > 0 ?
@@ -42,8 +44,8 @@ const Cart = () => {
                     <Col className="text-end">
 
                         {/* <Button className='button-color'>Borrow Book(s)</Button> */}
-                        <Link className='text-black' onClick={() => setView("card-view")}><IoCardOutline size={25} className='mx-2' /></Link>
                         <Link className='text-black' onClick={() => setView("list-view")}><FaListUl size={25} /></Link>
+                        <Link className='text-black' onClick={() => setView("card-view")}><IoCardOutline size={25} className='mx-2' /></Link>
 
                         {/* <FaListUl size={25} /> */}
 

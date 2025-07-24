@@ -23,7 +23,8 @@ import {
     ReviewsApproval,
     ReportsPage,
     SettingsPage,
-    ProceedToCheckout
+    ProceedToCheckout,
+    ThankYouPage
 
 } from "@pages/index"
 
@@ -64,6 +65,8 @@ const AppRoutes = () => {
                 <Route path="reports" element={<ReportsPage></ReportsPage>} />
                 <Route path="settings" element={<SettingsPage></SettingsPage>} />
                 <Route path="checkout" element={<ProceedToCheckout></ProceedToCheckout>} />
+                <Route path="thank-you" element={<ThankYouPage></ThankYouPage>} />
+
 
 
                 {/* <Route path="books/borrow" element={<BorrowBooks></BorrowBooks>} /> */}

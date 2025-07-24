@@ -1,28 +1,59 @@
+import { borrowBooks } from '@/axio/axioHelper';
+import { clearCart } from '@/redux/cart/cartSlice';
 import React, { useState, useEffect } from 'react';
 import { Container, Card, Table, Button, Form, Row, Col, Modal } from 'react-bootstrap';
 import { FaCheckCircle } from 'react-icons/fa';
+import { useDispatch, useSelector } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
-// Sample selected books data - replace with real selection state
-const selectedBooks = [
-    { id: 1, title: '1984', author: 'George Orwell' },
-    { id: 2, title: 'Brave New World', author: 'Aldous Huxley' },
-];
 
-export default function ProceedToCheckout({ member }) {
+
+export default function ProceedToCheckout() {
+    const location = useLocation()
+    // reading books items from cart
+    const selectedBooks = location.state;
     const [books, setBooks] = useState([]);
     const [loanPeriod, setLoanPeriod] = useState(14);
-    const [showSuccess, setShowSuccess] = useState(false);
+    // const [showSuccess, setShowSuccess] = useState(false);
+    const { user } = useSelector((state) => state.userInfo)
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     useEffect(() => {
-        // TODO: fetch selected books from context or API
         setBooks(selectedBooks);
     }, []);
 
-    const handleCheckout = () => {
+    const handleCheckout = async () => {
+
         // TODO: call API to process checkout with member.id, books, and loanPeriod
-        console.log('Processing checkout:', { member, books, loanPeriod });
+        console.log('Processing checkout:', { user, books, loanPeriod });
+        const userId = user._id
+
+
+        const obj = {
+            userId,
+            books,
+            loanPeriod
+        }
+
+        const result = await borrowBooks(obj)
         // Show success confirmation
-        setShowSuccess(true);
+
+        if (result.status === "success") {
+            toast.success("Borrowed Success")
+            // setShowSuccess(true)
+            dispatch(clearCart());
+            navigate("/user/thank-you");
+
+
+        }
+        else {
+            toast.error("Something Went Wrong")
+
+        }
+
+
     };
 
     return (
@@ -30,7 +61,7 @@ export default function ProceedToCheckout({ member }) {
             <Card>
                 <Card.Header>
                     <h3>Proceed to Checkout</h3>
-                    {member && <p>Member: <strong>{member.name}</strong> (ID: {member.id})</p>}
+                    {user && <p>Member: <strong>{user.fname}</strong> (Role: {user.role})</p>}
                 </Card.Header>
                 <Card.Body>
                     <Table striped bordered hover responsive className="mb-4">
@@ -42,8 +73,8 @@ export default function ProceedToCheckout({ member }) {
                             </tr>
                         </thead>
                         <tbody>
-                            {books.map((b, idx) => (
-                                <tr key={b.id}>
+                            {books?.map((b, idx) => (
+                                <tr key={b._id}>
                                     <td>{idx + 1}</td>
                                     <td>{b.title}</td>
                                     <td>{b.author}</td>
@@ -75,7 +106,7 @@ export default function ProceedToCheckout({ member }) {
             </Card>
 
             {/* Success Modal */}
-            <Modal show={showSuccess} onHide={() => setShowSuccess(false)} centered>
+            {/* <Modal show={showSuccess} onHide={() => setShowSuccess(false)} centered>
                 <Modal.Body className="text-center">
                     <FaCheckCircle size={48} className="text-success mb-3" />
                     <h4>Checkout Successful!</h4>
@@ -84,7 +115,7 @@ export default function ProceedToCheckout({ member }) {
                         Close
                     </Button>
                 </Modal.Body>
-            </Modal>
+            </Modal> */}
         </Container>
     );
 }
